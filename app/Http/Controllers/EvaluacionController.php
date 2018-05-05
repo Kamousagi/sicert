@@ -26,7 +26,9 @@ class EvaluacionController extends Controller
 {
     public function index()
     {
-        return view('aplicacion.evaluaciones.index', ['evaluaciones' => Evaluacion::all()]);
+        //pruebita
+        $evaluaciones = Evaluacion::all();
+        return view('aplicacion.evaluaciones.index', ['evaluaciones' => $evaluaciones]);
     }
 
     public function nuevo()
