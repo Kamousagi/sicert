@@ -12,7 +12,7 @@
                 <th>asdfas</th>
                 <th>asdfas</th>
                 <th>asdfas</th>
-                <th></th>
+                <th><a href="/evaluaciones/nuevo" class="btn btn-success">Agregar</a></th>
             </tr>
         <tbody>
             @foreach($evaluaciones as $evaluacion)
@@ -22,7 +22,7 @@
                 <td>{{$evaluacion['num_anio']}}</td>
                 <td>{{$evaluacion['num_correlativo']}}</td>
                 <td>{{$evaluacion['num_tipo']}}</td>
-                <td><button>Editar</button></td>
+                <td><a href="/evaluaciones/modificar/2" class="btn btn-warning">Editar</a></td>
             </tr>
             @endforeach
         </tbody>
