@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return view('aplicacion.portada.index'); });
+Route::get('/cargar_evaluacion', function () { return view('aplicacion.cargar_evaluacion.index'); });
+Route::get('/evaluaciones', function () { return view('aplicacion.evaluaciones.index'); });
+Route::get('/reportes', function () { return view('aplicacion.reportes.index'); });
