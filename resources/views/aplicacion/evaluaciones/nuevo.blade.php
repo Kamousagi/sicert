@@ -56,13 +56,14 @@
                     </tr>                    
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>                    
+                    @foreach ($evaluacion->detalle as $detalle)
+                        <tr>
+                            <td>{{ $detalle->num_pregunta }}</td>
+                            <td>{!! Form::text('num_respuesta[]', $detalle->num_respuesta, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('nom_mensaje[]', $detalle->nom_mensaje, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('num_peso[]', $detalle->num_peso, ['class' => 'form-control']) !!}</td>
+                        </tr>                    
+                    @endforeach
                 </tbody>
             </table>
             <div class="panel-footer text-right">

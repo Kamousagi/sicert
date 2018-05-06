@@ -21,4 +21,5 @@ Route::post('/cargar_evaluacion/guardar', 'CargarEvaluacionController@guardar');
 Route::get('/evaluaciones', 'EvaluacionController@index');
 Route::get('/evaluaciones/nuevo', 'EvaluacionController@nuevo');
 Route::post('/evaluaciones/guardar', 'EvaluacionController@guardar');
+
 Route::get('/reportes', function () { return view('aplicacion.reportes.index'); });
