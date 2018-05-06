@@ -24,7 +24,7 @@
                 
                     <div class="form-group col-sm-4">
                         <label>Código</label>
-                        {!! Form::text('cod_evaluacion', $evaluacion->cod_evaluacion, ['class' => 'form-control']) !!}
+                        {!! Form::text('cod_evaluacion', $evaluacion->cod_evaluacion, ['class' => 'form-control input-sm']) !!}
                     </div>
                     <div class="form-group col-sm-4">
                         <label>Grado</label>

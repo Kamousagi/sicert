@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Evaluacion;
+use App\EvaluacionDetalle;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -75,7 +76,18 @@ class EvaluacionController extends Controller
         $entidad->num_anio = $modelo->num_anio;
         $entidad->num_correlativo = $modelo->num_correlativo;
         $entidad->num_tipo = $modelo->num_tipo;
+        $entidad->fec_fecha = date('Y-m-d H:i');
         $entidad->save();
+
+        for ($i = 0; $i < 25; $i++)
+        {
+            $entidadDetalle = new EvaluacionDetalle();
+            $entidadDetalle->num_pregunta = $i;
+            $entidadDetalle->num_respuesta = 1;
+            $entidadDetalle->nom_mensaje = "";
+            $entidadDetalle->num_peso = 2;
+            $entidad->detalle()->save($entidadDetalle);
+        }
         
         return redirect('/evaluaciones');
     }
