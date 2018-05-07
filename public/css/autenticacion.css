@@ -1,0 +1,15 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}

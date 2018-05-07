@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" ng-app="RDash">
 <head>
@@ -17,12 +16,12 @@
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-  <link rel="stylesheet" href="/css/theme.css"/>
+  <link rel="stylesheet" href="/css/aplicacion.css"/>
 </head>
   <body>
 
       <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="#">SICERT</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -44,10 +43,17 @@
                 </div>
               </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
+            {{-- <form class="form-inline my-2 my-lg-0">
               <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            </form> --}}
+
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/logout">Cerra sesión</a>
+                </li>
+            </ul>
+
           </div>
         </nav>
 
