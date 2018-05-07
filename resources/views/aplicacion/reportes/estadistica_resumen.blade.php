@@ -13,28 +13,28 @@
     @endif
 
     {!! Form::open(array('action' => array('ReporteController@estadistica_resumen'))) !!}
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 Criterio de búsqueda
             </div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label>Evaluación</label>
-                    {!! Form::text('cod_evaluacion', ['class' => 'form-control']) !!}
-                    <select name="cod_evaluacion2" >
-                        @foreach($evaluaciones as $evaluacion)
-                        <option value="{{ $evaluacion->cod_evaluacion}}">{{ $evaluacion->num_anio}}-{{ $evaluacion->num_correlativo}}</option>
-                        @endforeach
-                    </select>                   
-                </div>
-                <div class="form-group">
-                    {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}                    
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Evaluación</label>
+                        {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
+                    </div>
                 </div>
             </div>
-            <div class="panel-heading">
-                Resultado de la búsqueda
+            <div class="card-footer text-right">
+                {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}
             </div>
+        </div>
+    {!! Form::close() !!}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Resultado de la búsqueda
+        </div>
+        <div class="panel-body">
             <table class="table">
                 <thead>
                     <tr>
@@ -68,7 +68,8 @@
                         </tr>
                     @endforeach                    
                 </tbody>
-            </table>
+            </table>            
         </div>
-    {!! Form::close() !!}
+    </div>
+            
 @endsection

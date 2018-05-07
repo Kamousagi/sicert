@@ -79,23 +79,36 @@ class ReporteController extends Controller
     }
     public function estadistica_detallado(Request $request)
     {
+        $evaluaciones = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            ->pluck('descripcion', 'cod_evaluacion');
+        $ugeles = Ugel::select(
+            'nom_ugel','cod_ugel')
+            ->pluck('nom_ugel', 'cod_ugel');
         $cod_evaluacion = $request->input('cod_evaluacion');
         $cod_ugel = $request->input('cod_ugel');
         $resultados = new EstadisticaDetalladoModelo();
         return view('aplicacion.reportes.estadistica_detallado', 
-            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'ugel_seleccionada' => $cod_ugel]);
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'ugel_seleccionada' => $cod_ugel,
+            'evaluaciones' => $evaluaciones, 'ugeles' => $ugeles]);
     }
     public function estadistica_preguntas(Request $request)
-    {        
+    {
+        $evaluaciones = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');
         $resultados = new EstadisticaPreguntasModelo();
         return view('aplicacion.reportes.estadistica_preguntas', 
-            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion]);
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'evaluaciones' => $evaluaciones]);
     }
     
     public function estadistica_resumen(Request $request)
     {
-        $evaluaciones = Evaluacion::all();
+        //$evaluaciones = Evaluacion::all();
+        $evaluaciones = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');
         $resultados = collect();
         if ($cod_evaluacion>0){

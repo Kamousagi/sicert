@@ -73,10 +73,7 @@ class CargarEvaluacionController extends Controller
                         $prueba->detalle()->save($pruebaDetalle);
 
                     }
-
                 }
-
-
             }
         }
 
