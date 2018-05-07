@@ -86,9 +86,11 @@ class ReporteController extends Controller
         return view('aplicacion.reportes.estadistica_preguntas', 
             ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_eval]);
     }
-    public function estadistica_resumen()
+
+    //public function estadistica_resumen()
+    public function estadistica_resumen(Request $request)
     {
-        $cod_eval = Input::get('cod_eval', 0);
+        $cod_eval = $request->input('cod_eval');
         $resultados = new EstadisticaResumenModelo();
         return view('aplicacion.reportes.estadistica_resumen', 
             ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_eval]);

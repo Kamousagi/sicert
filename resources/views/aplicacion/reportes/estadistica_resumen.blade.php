@@ -21,7 +21,7 @@
             <div class="panel-body">
                 <div class="form-group">
                     <label>Evaluación</label>
-                    <!-- {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!} -->
+                    <?php /*-- {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!} --> */ ?>
                     {!! Form::text('cod_evaluacion', $evaluacion_seleccionada, ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">

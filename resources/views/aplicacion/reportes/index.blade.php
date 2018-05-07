@@ -8,11 +8,6 @@
     <tr><td><a href="/reportes/estadistica_resumen">Estadística de la evaluación resumida</a></td></tr>
     <tr><td><a href="/reportes/estadistica_detallado">Estadística de la evaluación detallada</a></td></tr>
     <tr><td><a href="/reportes/estadistica_preguntas">Estadística del resultado de las preguntas por Evaluación</a></td></tr>
-    <tr><td><a href="/reportes/cronograma_evaluacion">Cronograma de evaluaciones pendientes</a></td></tr>
-    <tr>
-        {!! Form::open(['method' => 'DELETE', 'route' => $route]) !!}
-        <button type="submit"><i class="glyphicon glyphicon-remove"></i>Delete</button>
-        {!! Form::close() !!}
-    </tr>    
+    <tr><td><a href="/reportes/cronograma_evaluacion">Cronograma de evaluaciones pendientes</a></td></tr>  
 </table>
 @endsection
