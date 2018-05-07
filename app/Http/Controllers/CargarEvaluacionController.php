@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Prueba;
 use App\PruebaDetalle;
 use App\Evaluacion;
+use App\EvaluacionDetalle;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,6 +31,9 @@ class CargarEvaluacionController extends Controller
 
     public function guardar(Request $solicitud) {
 
+        $cod_evaluacion = $solicitud->input('cod_evaluacion');
+        $evaluacion = Evaluacion::where('cod_evaluacion', $cod_evaluacion)->with('detalle')->get();
+        //die($evaluacion);
         $archivo = $solicitud->file('archivo');
 
         DB::beginTransaction();
@@ -56,15 +60,18 @@ class CargarEvaluacionController extends Controller
 
                     $prueba->save();
 
-                    for($i=0; $i<25; $i++) {
-                        $nota = substr($linea, 92 + $i, 1);
+                    for($i=1; $i<=25; $i++) {
+                        //die($i);
+                        $nota = substr($linea, 91 + $i, 1);
                         if($nota == "*")
                         {
                             DB::rollBack();
                             die("no se encontro nota");
                         }
                         $pruebaDetalle = new PruebaDetalle();
-                        $pruebaDetalle->cod_evaluacion_detalle = 1;
+                        $detalle = $evaluacion->detalle()->where('num_pregunta', '=', $i)->first();
+                        die($detalle);
+                        $pruebaDetalle->cod_evaluacion_detalle = $detalle->cod_evaluacion_detalle;
                         $pruebaDetalle->num_respuesta = (int)$nota;
                         $prueba->detalle()->save($pruebaDetalle);
 
