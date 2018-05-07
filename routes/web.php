@@ -24,6 +24,6 @@ Route::post('/evaluaciones/guardar', 'EvaluacionController@guardar');
 
 Route::get('/reportes', function () { return view('aplicacion.reportes.index'); });
 Route::get('/reportes/cronograma_evaluacion', 'ReporteController@cronograma_evaluacion');
-Route::get('/reportes/estadistica_detallado/{cod_eval}/{cod_ugel}', 'ReporteController@estadistica_detallado');
-Route::get('/reportes/estadistica_preguntas/{cod_eval}', 'ReporteController@estadistica_preguntas');
-Route::get('/reportes/estadistica_resumen/{cod_eval}', 'ReporteController@estadistica_resumen');
+Route::post('/reportes/estadistica_detallado', 'ReporteController@estadistica_detallado');
+Route::post('/reportes/estadistica_preguntas', 'ReporteController@estadistica_preguntas');
+Route::post('/reportes/estadistica_resumen', 'ReporteController@estadistica_resumen');

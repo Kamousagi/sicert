@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    {!! Form::open(['url' => 'reporte/estadistica_detallado']) !!}
+    {!! Form::open(array('action' => array('ReporteController@estadistica_detallado'))) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -21,12 +21,10 @@
             <div class="panel-body">
                 <div class="form-group">
                     <label>Evaluación</label>
-                    <!-- {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!} -->
                     {!! Form::text('cod_evaluacion', $evaluacion_seleccionada, ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label>Ugel</label>
-                    <!-- {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!} -->
                     {!! Form::text('cod_ugel', $ugel_seleccionada, ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">

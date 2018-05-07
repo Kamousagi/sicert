@@ -5,9 +5,29 @@
 <h1>Reportes</h1>
 
 <table class="table table-hover table-bordered table-condensed">
-    <tr><td><a href="/reportes/estadistica_resumen">Estadística de la evaluación resumida</a></td></tr>
-    <tr><td><a href="/reportes/estadistica_detallado">Estadística de la evaluación detallada</a></td></tr>
-    <tr><td><a href="/reportes/estadistica_preguntas">Estadística del resultado de las preguntas por Evaluación</a></td></tr>
-    <tr><td><a href="/reportes/cronograma_evaluacion">Cronograma de evaluaciones pendientes</a></td></tr>  
+<tr><td>
+{!! Form::open(array('action' => array('ReporteController@estadistica_resumen'))) !!}    
+    {{ Form::hidden('cod_evaluacion', '0') }}
+    {!! Form::submit('Estadística de la evaluación resumida', ['class' => 'btn btn-success']) !!}
+{!! Form::close() !!}
+</td></tr>
+<tr><td>
+{!! Form::open(array('action' => array('ReporteController@estadistica_detallado'))) !!}    
+    {{ Form::hidden('cod_evaluacion', '0') }}
+    {{ Form::hidden('cod_ugel', '0') }}
+    {!! Form::submit('Estadística de la evaluación detallada', ['class' => 'btn btn-success']) !!}
+{!! Form::close() !!}
+</td></tr>
+<tr><td>
+{!! Form::open(array('action' => array('ReporteController@estadistica_preguntas'))) !!}    
+    {{ Form::hidden('cod_evaluacion', '0') }}
+    {!! Form::submit('Estadística del resultado de las preguntas por Evaluación', ['class' => 'btn btn-success']) !!}
+{!! Form::close() !!}
+</td></tr>
+<tr><td>
+{!! Form::open(array('method' => 'get','action' => array('ReporteController@cronograma_evaluacion'))) !!}    
+    {!! Form::submit('Cronograma de evaluaciones pendientes', ['class' => 'btn btn-success']) !!}
+{!! Form::close() !!}
+</td></tr>
 </table>
 @endsection

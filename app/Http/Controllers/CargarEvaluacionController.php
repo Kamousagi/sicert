@@ -26,7 +26,8 @@ class CargarEvaluacionController extends Controller
         $modelo = new CargarEvaluacionModelo();
         $modelo->cod_evaluacion = 0;
 
-        //$evaluaciones = ["asdf" => "asdf", "xxx" => "yyy"];
+        $evaluaciones = ["asdf" => "asdf", "xxx" => "yyy"];
+        /*
         $evaluaciones = [];
         foreach (Evaluacion::all() as $evaluacion) {
             // $tmp = new SeleccionableModelo();
@@ -38,6 +39,7 @@ class CargarEvaluacionController extends Controller
             //$evaluaciones[] = "asdfs" => "asdfas";
             //array_push($evaluaciones, ("asdf" => "asdfasd"));
         }
+        */
         return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
     }
 
