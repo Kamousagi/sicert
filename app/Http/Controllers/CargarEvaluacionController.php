@@ -74,14 +74,13 @@ class CargarEvaluacionController extends Controller
                     $consolidado->nom_ugel = $utel->nom_ugel;
                     $consolidado->nom_institucion = $institucion->nom_institucion;
                     $consolidado->num_peso_total = 0;
-
-                    // $consolidadoCabeza = new ConsolidadoCabeza();
-                    // $consolidadoCabeza->nom_alumno = $nom_alumno;
-                    // $consolidadoCabeza->num_nota = 0;
-                    // $consolidadoCabeza->nom_comentario = "algun comentario";
-                    // $consolidado->cabeza()->save($consolidadoCabeza);
-
                     $prueba->consolidado()->save($consolidado);
+
+                    $consolidadoCabeza = new ConsolidadoCabeza();
+                    $consolidadoCabeza->nom_alumno = $nom_alumno;
+                    $consolidadoCabeza->num_nota = 0;
+                    $consolidadoCabeza->nom_comentario = "algun comentario";
+                    $consolidado->cabeza()->save($consolidadoCabeza);
 
                     for($i=1; $i<=25; $i++) {
                         $nota = substr($linea, 91 + $i, 1);
@@ -99,6 +98,10 @@ class CargarEvaluacionController extends Controller
                         $pruebaDetalle->num_respuesta = (int)$nota;
                         $prueba->detalle()->save($pruebaDetalle);
 
+                        $consolidadoCuerpo = new ConsolidadoCuerpo();
+                        $consolidadoCuerpo->num_pregunta = $i;
+                        $consolidadoCuerpo->num_respuesta = $detalle->num_respuesta;
+                        $consolidadoCabeza->cuerpo()->save($consolidadoCuerpo);
                     }
 
                 }
