@@ -10,4 +10,9 @@ class Ugel extends Model
     public $timestamps = false;
     public $primaryKey = "cod_ugel";
 
+    public function instituciones()
+    {
+        return $this->hasMany('App\Institucion', 'cod_ugel');
+    }
+
 }

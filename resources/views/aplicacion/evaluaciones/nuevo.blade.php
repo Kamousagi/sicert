@@ -90,8 +90,8 @@
                 </tbody>
             </table>
             <div class="card-footer text-right">
-                {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
-                <a href="/evaluaciones" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Guardar <i class="fas fa-check-circle"></i></button>
+                <a href="/evaluaciones" class="btn btn-danger">Cancelar <i class="fas fa-times-circle"></i></a>
             </div>
         </div>
 

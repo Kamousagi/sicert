@@ -14,4 +14,9 @@ class Prueba extends Model
     {
         return $this->hasMany('App\PruebaDetalle', 'cod_prueba');
     }
+
+    public function consolidado()
+    {
+        return $this->hasMany('App\Consolidado', 'cod_prueba');
+    }
 }

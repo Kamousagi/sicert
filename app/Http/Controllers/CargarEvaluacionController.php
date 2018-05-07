@@ -7,6 +7,12 @@ use App\Prueba;
 use App\PruebaDetalle;
 use App\Evaluacion;
 use App\EvaluacionDetalle;
+use App\Consolidado;
+use App\ConsolidadoCabeza;
+use App\ConsolidadoCuerpo;
+
+use App\Institucion;
+use App\Ugel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +25,7 @@ class CargarEvaluacionController extends Controller
 {
 
     public function index() {
+
         $modelo = new CargarEvaluacionModelo();
         $modelo->cod_evaluacion = 0;
 
@@ -37,12 +44,19 @@ class CargarEvaluacionController extends Controller
         DB::beginTransaction();
 
         if ($solicitud->hasFile('archivo')) {
+
             $data = file($archivo->getRealPath());
             $indice = 0;
+
             foreach($data as $linea) {
+
                 $indice++;
                 $nom_alumno = trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
                 $num_seccion = substr($linea, 90, 2);
+                $num_institucion = substr($linea, 74, 7);
+
+                $institucion = Institucion::where('num_institucion', $num_institucion)->first();
+                $utel = Ugel::where('cod_ugel', $institucion->cod_ugel)->first();
 
                 if($num_seccion == "" || $num_seccion == "**")
                 {
@@ -53,8 +67,21 @@ class CargarEvaluacionController extends Controller
                     $prueba->cod_institucion = 1;
                     $prueba->nom_alumno = $nom_alumno;
                     $prueba->num_seccion = (int)$num_seccion;
-
                     $prueba->save();
+
+                    $consolidado = new Consolidado();
+                    $consolidado->cod_evaluacion = $cod_evaluacion;
+                    $consolidado->nom_ugel = $utel->nom_ugel;
+                    $consolidado->nom_institucion = $institucion->nom_institucion;
+                    $consolidado->num_peso_total = 0;
+
+                    // $consolidadoCabeza = new ConsolidadoCabeza();
+                    // $consolidadoCabeza->nom_alumno = $nom_alumno;
+                    // $consolidadoCabeza->num_nota = 0;
+                    // $consolidadoCabeza->nom_comentario = "algun comentario";
+                    // $consolidado->cabeza()->save($consolidadoCabeza);
+
+                    $prueba->consolidado()->save($consolidado);
 
                     for($i=1; $i<=25; $i++) {
                         $nota = substr($linea, 91 + $i, 1);
@@ -73,8 +100,11 @@ class CargarEvaluacionController extends Controller
                         $prueba->detalle()->save($pruebaDetalle);
 
                     }
+
                 }
+
             }
+
         }
 
         //

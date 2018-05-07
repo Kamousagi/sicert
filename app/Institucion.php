@@ -10,4 +10,9 @@ class Institucion extends Model
     public $timestamps = false;
     public $primaryKey = "cod_institucion";
 
+    public function ugel()
+    {
+        return $this->belongsTo('App\Ugel');
+    }
+
 }

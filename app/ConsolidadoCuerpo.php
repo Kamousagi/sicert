@@ -15,8 +15,8 @@ class ConsolidadoCuerpo extends Model
         return $this->belongsTo('App\ConsolidadoCabeza');
     }
     
-    public function detalle()
-    {
-        return $this->hasMany('App\ConsolidadoCuerpo', 'cod_consolidado_cuerpo');
-    }
+    // public function detalle()
+    // {
+    //     return $this->hasMany('App\ConsolidadoCuerpo', 'cod_consolidado_cuerpo');
+    // }
 }
