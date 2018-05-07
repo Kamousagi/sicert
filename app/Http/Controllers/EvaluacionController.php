@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Evaluacion;
+use App\EvaluacionDetalle;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Validator;
 
 class EvaluacionModelo {
     public $cod_evaluacion;
@@ -13,6 +15,7 @@ class EvaluacionModelo {
     public $num_anio;
     public $num_correlativo;
     public $num_tipo;
+    public $detalle;
 }
 
 class EvaluacionDetalleModelo {
@@ -20,14 +23,14 @@ class EvaluacionDetalleModelo {
     public $num_pregunta;
     public $num_respuesta;
     public $nom_mensaje;
+    public $num_peso;
 }
 
 class EvaluacionController extends Controller
 {
     public function index()
     {
-        //pruebita
-        $evaluaciones = Evaluacion::all();
+        $evaluaciones = Evaluacion::all();       
         return view('aplicacion.evaluaciones.index', ['evaluaciones' => $evaluaciones]);
     }
 
@@ -35,34 +38,54 @@ class EvaluacionController extends Controller
     {
         $evaluacion = new EvaluacionModelo();
         $evaluacion->cod_evaluacion = 0;
+
+        for ($i=1; $i <= 25; $i++)
+        {
+            $detalle = new EvaluacionDetalleModelo();
+            $detalle->num_pregunta = $i;
+            $detalle->num_respuesta = 0;
+            $detalle->nom_mensaje = "asdfasd";
+            $detalle->num_peso = 0;
+            $evaluacion->detalle[] = $detalle;
+        }
+        
         return view('aplicacion.evaluaciones.nuevo', ['evaluacion' => $evaluacion]);
     }
 
     public function guardar(Request $solicitud) {
 
-        // $validacion = Validator::make($solicitud->all(), [
+        // $this->validate($solicitud, [
         //     'cod_evaluacion' => 'required',
         //     'num_grado' => 'required',
         //     'num_anio' => 'required',
         //     'num_correlativo' => 'required',
-        //     'num_tipo' => 'required'
+        //     'num_tipo' => 'required',
+        //     'num_respuesta.*' => 'required'
         // ]);
 
-        $this->validate($solicitud, [
+        // $data = $solicitud->validate([
+        //     'cod_evaluacion' => 'required',
+        //     'num_grado' => 'required',
+        //     'num_anio' => 'required',
+        //     'num_correlativo' => 'required',
+        //     'num_tipo' => 'required',
+        //     'num_respuesta.*' => 'required'
+        // ]);
+
+        $validator = Validator::make($solicitud->all(), [
             'cod_evaluacion' => 'required',
             'num_grado' => 'required',
             'num_anio' => 'required',
             'num_correlativo' => 'required',
-            'num_tipo' => 'required'
+            'num_tipo' => 'required',
+            'num_respuesta.*' => 'required',
         ]);
 
-        // $validacion = $solicitud->validate([
-        //     'cod_evaluacion' => 'required',
-        //     'num_grado' => 'required',
-        //     'num_anio' => 'required',
-        //     'num_correlativo' => 'required',
-        //     'num_tipo' => 'required'
-        // ]);
+        if ($validator->fails()) {
+            return redirect('/evaluaciones/nuevo')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
         $modelo = new EvaluacionModelo();
         $modelo->cod_evaluacion = $solicitud->input('cod_evaluacion');
@@ -77,8 +100,23 @@ class EvaluacionController extends Controller
         $entidad->num_anio = $modelo->num_anio;
         $entidad->num_correlativo = $modelo->num_correlativo;
         $entidad->num_tipo = $modelo->num_tipo;
+        $entidad->fec_fecha = date('Y-m-d H:i');
         $entidad->save();
-        
+
+        $num_respuesta = $solicitud->input('num_respuesta');
+        $nom_mensaje = $solicitud->input('nom_mensaje');
+        $num_peso = $solicitud->input('num_peso');
+        $numero = 0;
+        for ($i = 0; $i < 25; $i++)
+        {
+            $entidadDetalle = new EvaluacionDetalle();
+            $entidadDetalle->num_pregunta = $i + 1;
+            $entidadDetalle->num_respuesta = $num_respuesta[$i];
+            $entidadDetalle->nom_mensaje = $nom_mensaje[$i];
+            $entidadDetalle->num_peso = $num_peso[$i];
+            $entidad->detalle()->save($entidadDetalle);
+        }
+
         return redirect('/evaluaciones');
     }
 }
