@@ -22,35 +22,16 @@ class CargarEvaluacionController extends Controller
         $modelo = new CargarEvaluacionModelo();
         $modelo->cod_evaluacion = 0;
 
-<<<<<<< HEAD
-        $evaluaciones = ["asdf" => "asdf", "xxx" => "yyy"];
-        /*
-        $evaluaciones = [];
-        foreach (Evaluacion::all() as $evaluacion) {
-            // $tmp = new SeleccionableModelo();
-            // $tmp->codigo = $evaluacion->cod_evaluacion;
-            // $tmp->descripcion = $evaluacion->cod_evaluacion;
-            //$tmp[];
-            //$tmp[] = "asdf" => "asdfas";
-            //$evaluaciones[] = ("asdf" => "asdfas" );
-            //$evaluaciones[] = "asdfs" => "asdfas";
-            //array_push($evaluaciones, ("asdf" => "asdfasd"));
-        }
-        */
-=======
         $evaluaciones = Evaluacion::select(
             DB::raw("CONCAT(NUM_ANIO,' ',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
             ->pluck('descripcion', 'cod_evaluacion');
 
->>>>>>> 9e904f4d01d23e83a4ef0e3974b26bb8a8ca8eb8
         return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
     }
 
     public function guardar(Request $solicitud) {
 
         $cod_evaluacion = $solicitud->input('cod_evaluacion');
-        $evaluacion = Evaluacion::where('cod_evaluacion', $cod_evaluacion)->with('detalle')->get();
-        //die($evaluacion);
         $archivo = $solicitud->file('archivo');
 
         DB::beginTransaction();
@@ -62,8 +43,6 @@ class CargarEvaluacionController extends Controller
                 $indice++;
                 $nom_alumno = trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
                 $num_seccion = substr($linea, 90, 2);
-
-
 
                 if($num_seccion == "" || $num_seccion == "**")
                 {
@@ -78,7 +57,6 @@ class CargarEvaluacionController extends Controller
                     $prueba->save();
 
                     for($i=1; $i<=25; $i++) {
-                        //die($i);
                         $nota = substr($linea, 91 + $i, 1);
                         if($nota == "*")
                         {
@@ -86,8 +64,10 @@ class CargarEvaluacionController extends Controller
                             die("no se encontro nota");
                         }
                         $pruebaDetalle = new PruebaDetalle();
-                        $detalle = $evaluacion->detalle()->where('num_pregunta', '=', $i)->first();
-                        die($detalle);
+                        $detalle = EvaluacionDetalle::
+                            where('cod_evaluacion', $cod_evaluacion)
+                            ->where('num_pregunta', $i)
+                            ->first();
                         $pruebaDetalle->cod_evaluacion_detalle = $detalle->cod_evaluacion_detalle;
                         $pruebaDetalle->num_respuesta = (int)$nota;
                         $prueba->detalle()->save($pruebaDetalle);

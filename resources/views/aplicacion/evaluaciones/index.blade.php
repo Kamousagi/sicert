@@ -6,7 +6,7 @@
         <li class="breadcrumb-item active">Evaluaciones</li>
     </ul>
 
-    <table class="table table-hover table-bordered table-condensed">
+    <table class="table table-hover table-bordered table-condensed table-sm">
         <thead>
             <tr>
                 <th style="width: 20%">Código</th>
