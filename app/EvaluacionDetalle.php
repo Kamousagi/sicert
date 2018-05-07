@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Evaluacion;
 use Illuminate\Database\Eloquent\Model;
 
 class EvaluacionDetalle extends Model
@@ -12,6 +13,6 @@ class EvaluacionDetalle extends Model
 
     public function evaluacion()
     {
-        return $this->belongsTo('App\Evaluacion');
+        return $this->belongsTo('App\Evaluacion', 'cod_evaluacion');
     }
 }

@@ -12,7 +12,7 @@ class Institucion extends Model
 
     public function ugel()
     {
-        return $this->belongsTo('App\Ugel');
+        return $this->belongsTo('App\Ugel', 'cod_ugel');
     }
 
 }
