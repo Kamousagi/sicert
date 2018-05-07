@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    {!! Form::open(['url' => 'reporte/estadistica_resumen']) !!}
+    {!! Form::open(array('action' => array('ReporteController@estadistica_resumen'))) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -21,11 +21,15 @@
             <div class="panel-body">
                 <div class="form-group">
                     <label>Evaluación</label>
-                    <?php /*-- {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!} --> */ ?>
-                    {!! Form::text('cod_evaluacion', $evaluacion_seleccionada, ['class' => 'form-control']) !!}
+                    {!! Form::text('cod_evaluacion', ['class' => 'form-control']) !!}
+                    <select name="cod_evaluacion2" >
+                        @foreach($evaluaciones as $evaluacion)
+                        <option value="{{ $evaluacion->cod_evaluacion}}">{{ $evaluacion->num_anio}}-{{ $evaluacion->num_correlativo}}</option>
+                        @endforeach
+                    </select>                   
                 </div>
                 <div class="form-group">
-                    {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}
+                    {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}                    
                 </div>
             </div>
             <div class="panel-heading">

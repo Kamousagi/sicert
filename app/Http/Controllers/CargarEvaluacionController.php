@@ -22,10 +22,27 @@ class CargarEvaluacionController extends Controller
         $modelo = new CargarEvaluacionModelo();
         $modelo->cod_evaluacion = 0;
 
+<<<<<<< HEAD
+        $evaluaciones = ["asdf" => "asdf", "xxx" => "yyy"];
+        /*
+        $evaluaciones = [];
+        foreach (Evaluacion::all() as $evaluacion) {
+            // $tmp = new SeleccionableModelo();
+            // $tmp->codigo = $evaluacion->cod_evaluacion;
+            // $tmp->descripcion = $evaluacion->cod_evaluacion;
+            //$tmp[];
+            //$tmp[] = "asdf" => "asdfas";
+            //$evaluaciones[] = ("asdf" => "asdfas" );
+            //$evaluaciones[] = "asdfs" => "asdfas";
+            //array_push($evaluaciones, ("asdf" => "asdfasd"));
+        }
+        */
+=======
         $evaluaciones = Evaluacion::select(
             DB::raw("CONCAT(NUM_ANIO,' ',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
             ->pluck('descripcion', 'cod_evaluacion');
 
+>>>>>>> 9e904f4d01d23e83a4ef0e3974b26bb8a8ca8eb8
         return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
     }
 
