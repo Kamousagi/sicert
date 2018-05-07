@@ -12,11 +12,11 @@
                 Datos de carga de evaluación
             </div>
             <div class="card-body">
-                <div>
-                    {{ $modelo->cod_evaluacion }}
-                    {!! Form::select('size', $evaluaciones) !!}
-                </div>
                 <div class="row">
+                    <div class="col-3">
+                        <label>Evaluación</label>
+                        {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!}
+                    </div>
                     <div class="col-6">
                         <label>Archivo</label>
                         {!! Form::file('archivo', ['class' => 'form-control']) !!}
