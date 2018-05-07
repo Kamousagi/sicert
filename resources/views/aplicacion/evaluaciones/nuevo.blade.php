@@ -2,7 +2,10 @@
 
 
 @section('content')
-    <h1>Evaluaciones - Nuevo</h1>
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/evaluaciones">Evaluaciones</a></li>
+        <li class="breadcrumb-item active">Nuevo</li>
+    </ul>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -14,64 +17,95 @@
         </div>
     @endif
 
-    {!! Form::open(['url' => 'evaluaciones/guardar']) !!}
+    {!! Form::open(['url' => 'evaluaciones/guardar', 'id'=>"formulario"]) !!}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 Mantenimiento de evaluacion
             </div>
-            <div class="panel-body">
-                
-                    <div class="form-group col-sm-4">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-2">
                         <label>Código</label>
-                        {!! Form::text('cod_evaluacion', $evaluacion->cod_evaluacion, ['class' => 'form-control input-sm']) !!}
+                        {!! Form::text('cod_evaluacion', $evaluacion->cod_evaluacion, ['class' => 'form-control', 'readonly', '']) !!}
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="col-2">
                         <label>Grado</label>
-                        {!! Form::text('num_grado', '', ['class' => 'form-control']) !!}
+                        {!! Form::selectRange('num_grado', 10, 20, null, ['class' => 'form-control', '']) !!}
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="col-2">
                         <label>Año</label>
-                        {!! Form::text('num_anio', '', ['class' => 'form-control']) !!}
+                        {!! Form::selectRange('num_anio', 2016, date('Y'), null, ['class' => 'form-control', '']) !!}
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="col-2">
                         <label>Correlativo</label>
-                        {!! Form::text('num_correlativo', '', ['class' => 'form-control']) !!}
+                        {!! Form::selectRange('num_correlativo', 1, 300, null, ['class' => 'form-control', '']) !!}
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="col-2">
                         <label>Tipo</label>
-                        {!! Form::text('num_tipo', '', ['class' => 'form-control']) !!}
+                        {!! Form::select('num_tipo', array(
+                            null => null,
+                            1 => 'Matematica', 
+                            2 => 'Comunicacion',
+                            3 => 'Ciencias sociales'
+                        ), null, ['class' => 'form-control', '']) !!}
                     </div>
+                </div>
                     
             </div>
-            <div class="panel-heading">
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
                 Detalle de evaluación
             </div>
-            <table class="table">
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Nº</th>
                         <th>Respuesta</th>
                         <th>Mensaje</th>
+                        <th>Peso</th>
                     </tr>                    
                 </thead>
                 <tbody>
                     @foreach ($evaluacion->detalle as $detalle)
                         <tr>
                             <td>{{ $detalle->num_pregunta }}</td>
-                            <td>{!! Form::text('num_respuesta[]', $detalle->num_respuesta, ['class' => 'form-control']) !!}</td>
-                            <td>{!! Form::text('nom_mensaje[]', $detalle->nom_mensaje, ['class' => 'form-control']) !!}</td>
-                            <td>{!! Form::text('num_peso[]', $detalle->num_peso, ['class' => 'form-control']) !!}</td>
+                            <td>
+                                {!! Form::select('num_respuesta[]', array(
+                                    null => null,
+                                    1 => 1, 
+                                    2 => 2,
+                                    3 => 3,
+                                    4 => 4,
+                                    5 => 5
+                                ), null, ['class' => 'form-control', '']) !!}
+                            </td>
+                            <td>{!! Form::text('nom_mensaje[]', $detalle->nom_mensaje, ['class' => 'form-control', '']) !!}</td>
+                            <td>{!! Form::selectRange('num_peso[]', 1, 5, null, ['class' => 'form-control', '']) !!}</td>
                         </tr>                    
                     @endforeach
                 </tbody>
             </table>
-            <div class="panel-footer text-right">
+            <div class="card-footer text-right">
                 {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
                 <a href="/evaluaciones" class="btn btn-danger">Cancelar</a>
             </div>
         </div>
 
     {!! Form::close() !!}
+
+    <script type="text/javascript">
+        // $("#formulario").validate({
+        //     submitHandler: function(form) {
+        //         // some other code
+        //         // maybe disabling submit button
+        //         // then:
+        //         $(form).submit();
+        //     }
+        // });
+    </script>
 
 @endsection

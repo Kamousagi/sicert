@@ -5,12 +5,41 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Prueba;
 use App\PruebaDetalle;
+use App\Evaluacion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+class CargarEvaluacionModelo {
+    public $cod_evaluacion;
+}
+
+// class SeleccionableModelo {
+//     public $codigo;
+//     public $descripcion;
+// }
+
 class CargarEvaluacionController extends Controller
 {
+
+    public function index() {
+        $modelo = new CargarEvaluacionModelo();
+        $modelo->cod_evaluacion = 0;
+
+        //$evaluaciones = ["asdf" => "asdf", "xxx" => "yyy"];
+        $evaluaciones = [];
+        foreach (Evaluacion::all() as $evaluacion) {
+            // $tmp = new SeleccionableModelo();
+            // $tmp->codigo = $evaluacion->cod_evaluacion;
+            // $tmp->descripcion = $evaluacion->cod_evaluacion;
+            //$tmp[];
+            //$tmp[] = "asdf" => "asdfas";
+            //$evaluaciones[] = ("asdf" => "asdfas" );
+            //$evaluaciones[] = "asdfs" => "asdfas";
+            //array_push($evaluaciones, ("asdf" => "asdfasd"));
+        }
+        return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
+    }
 
     public function guardar(Request $solicitud) {
 

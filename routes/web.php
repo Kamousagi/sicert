@@ -15,7 +15,7 @@ use App\Http\Controllers;
 
 Route::get('/', function () { return view('aplicacion.portada.index'); });
 
-Route::get('/cargar_evaluacion', function () { return view('aplicacion.cargar_evaluacion.index'); });
+Route::get('/cargar_evaluacion', 'CargarEvaluacionController@index');
 Route::post('/cargar_evaluacion/guardar', 'CargarEvaluacionController@guardar');
 
 Route::get('/evaluaciones', 'EvaluacionController@index');

@@ -7,6 +7,7 @@ use App\EvaluacionDetalle;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Validator;
 
 class EvaluacionModelo {
     public $cod_evaluacion;
@@ -53,13 +54,38 @@ class EvaluacionController extends Controller
 
     public function guardar(Request $solicitud) {
 
-        $this->validate($solicitud, [
+        // $this->validate($solicitud, [
+        //     'cod_evaluacion' => 'required',
+        //     'num_grado' => 'required',
+        //     'num_anio' => 'required',
+        //     'num_correlativo' => 'required',
+        //     'num_tipo' => 'required',
+        //     'num_respuesta.*' => 'required'
+        // ]);
+
+        // $data = $solicitud->validate([
+        //     'cod_evaluacion' => 'required',
+        //     'num_grado' => 'required',
+        //     'num_anio' => 'required',
+        //     'num_correlativo' => 'required',
+        //     'num_tipo' => 'required',
+        //     'num_respuesta.*' => 'required'
+        // ]);
+
+        $validator = Validator::make($solicitud->all(), [
             'cod_evaluacion' => 'required',
             'num_grado' => 'required',
             'num_anio' => 'required',
             'num_correlativo' => 'required',
-            'num_tipo' => 'required'
+            'num_tipo' => 'required',
+            'num_respuesta.*' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return redirect('/evaluaciones/nuevo')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
         $modelo = new EvaluacionModelo();
         $modelo->cod_evaluacion = $solicitud->input('cod_evaluacion');
