@@ -32,6 +32,7 @@ class CargarEvaluacionController extends Controller
 
         $evaluaciones = Evaluacion::select(
             DB::raw("CONCAT(NUM_ANIO,' ',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            ->where('ind_procesado', '0')
             ->pluck('descripcion', 'cod_evaluacion');
 
         return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
@@ -64,6 +65,9 @@ class CargarEvaluacionController extends Controller
 
         $num_peso_total = $evaluacion->detalle->sum('num_peso');
         DB::beginTransaction();
+
+        $evaluacion->ind_procesado = 1;
+        $evaluacion->save();
 
         if ($solicitud->hasFile('archivo')) {
 
