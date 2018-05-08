@@ -2,8 +2,7 @@
 
 
 @section('content')
-    <h1>Portada</h1>
-    <p>Hola gato</p>
-    <p>otro gatooo</p>
-    asdf
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Portada</li>
+    </ul>
 @endsection

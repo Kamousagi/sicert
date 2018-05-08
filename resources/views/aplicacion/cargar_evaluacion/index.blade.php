@@ -5,6 +5,16 @@
         <li class="breadcrumb-item active">Cargar evaluación</li>
     </ul>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul style="margin: 0px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     {!! Form::open(array('url' => 'cargar_evaluacion/guardar', 'method' => 'post', 'files' => true)) !!}
     
         <div class="card">
@@ -15,7 +25,7 @@
                 <div class="row">
                     <div class="col-3">
                         <label>Evaluación</label>
-                        {!! Form::select('cod_evaluacion', $evaluaciones, null, ['class' => 'form-control']) !!}
+                        {!! Form::select('cod_evaluacion', $evaluaciones, null, ['placeholder' => 'Seleccione una evaluación', 'class' => 'form-control']) !!}
                     </div>
                     <div class="col-6">
                         <label>Archivo</label>
@@ -24,8 +34,8 @@
                 </div>
             </div>
             <div class="card-footer text-right">
-                {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
-                <a href="/evaluaciones" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Guardar <i class="fas fa-check-circle"></i></button>
+                <a href="/evaluaciones" class="btn btn-danger">Cancelar <i class="fas fa-times-circle"></i></a>
             </div>
 
         </div>

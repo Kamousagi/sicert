@@ -17,6 +17,7 @@ use App\Puntaje;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Validator;
 
 class CargarEvaluacionModelo {
     public $cod_evaluacion;
@@ -38,11 +39,27 @@ class CargarEvaluacionController extends Controller
 
     public function guardar(Request $solicitud) {
 
+        $messages = [
+            'cod_evaluacion.required' => 'Seleccione una evaluación',
+            'archivo.required' => 'Seleccione un archivo para cargar',
+        ];
+        $validator = Validator::make($solicitud->all(), [
+            'cod_evaluacion' => 'required',
+            'archivo' => 'required',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect('/cargar_evaluacion')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
         $cod_evaluacion = $solicitud->input('cod_evaluacion');
         $archivo = $solicitud->file('archivo');
 
         $evaluacion = Evaluacion::with('detalle')->where('cod_evaluacion', $cod_evaluacion)->first();
         $puntajes = Puntaje::all();
+        $instituciones = Institucion::with('ugel')->get();
 
         $num_peso_total = $evaluacion->detalle->sum('num_peso');
         DB::beginTransaction();
@@ -71,7 +88,7 @@ class CargarEvaluacionController extends Controller
                     die($indice.", No se encontro la sección en la fila x. : ".$nom_alumno);
                 }
             
-                $institucion = Institucion::with('ugel')->where('num_institucion', $num_institucion)->first();
+                $institucion = $instituciones->where('num_institucion', $num_institucion)->first();
                 if($institucion == null)
                 {
                     die($num_institucion);
