@@ -25,8 +25,9 @@ Route::middleware(['auth'])->group(function()
     Route::post('/cargar_evaluacion/guardar', 'CargarEvaluacionController@guardar');
 
     Route::get('/evaluaciones', 'EvaluacionController@index');
-    Route::get('/evaluaciones/nuevo', 'EvaluacionController@nuevo');
-    Route::post('/evaluaciones/guardar', 'EvaluacionController@guardar');
+    Route::get('/evaluaciones/nuevo', 'EvaluacionController@getNuevo');
+    Route::get('/evaluaciones/editar/{cod_evaluacion}', 'EvaluacionController@getEditar');
+    Route::post('/evaluaciones/guardar', 'EvaluacionController@postGuardar');
 
     Route::get('/reportes', function () { return view('aplicacion.reportes.index'); });
     Route::get('/reportes/cronograma_evaluacion', 'ReporteController@cronograma_evaluacion');

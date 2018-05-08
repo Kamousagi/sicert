@@ -43,6 +43,7 @@ class CargarEvaluacionController extends Controller
             'cod_evaluacion.required' => 'Seleccione una evaluación',
             'archivo.required' => 'Seleccione un archivo para cargar',
         ];
+        
         $validator = Validator::make($solicitud->all(), [
             'cod_evaluacion' => 'required',
             'archivo' => 'required',

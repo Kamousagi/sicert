@@ -10,7 +10,7 @@
         <div class="card-header">
             Resultado de evaluaciones <span class="badge badge-secondary">{{ count($evaluaciones) }}</span>
         </div>
-        <table class="table table-striped table-hover table-hover">
+        <table class="table table-striped table-hover table-hover table-sm">
             <thead>
                 <tr>
                     <th style="width: 20%">Código</th>
@@ -28,7 +28,7 @@
                     <td>{{$evaluacion['num_anio']}}</td>
                     <td>{{$evaluacion['num_correlativo']}}</td>
                     <td>{{$evaluacion['num_tipo']}}</td>
-                    <td><a href="/evaluaciones/modificar/2" class="btn btn-sm btn-warning">Editar <i class="fas fa-edit"></i></a></td>
+                    <td><a href="/evaluaciones/editar/{{$evaluacion['cod_evaluacion']}}" class="btn btn-sm btn-warning">Editar <i class="fas fa-edit"></i></a></td>
                 </tr>
                 @endforeach
             </tbody>

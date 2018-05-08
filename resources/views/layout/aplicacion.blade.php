@@ -8,15 +8,16 @@
 
   <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-  <script src="/js/jquery-3.3.1.slim.min.js"></script>
-  <script src="/js/popper.min.js"></script>
-  <script src="/js/jquery.validate.min.js"></script>
+  <script src="/js/jquery.js"></script>
 
   <script src="/js/bootstrap.min.js"></script>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css">
 
   <link rel="stylesheet" href="/css/aplicacion.css"/>
+
+  <script src="/js/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="/css/jquery-ui.min.css"/>
 </head>
   <body>
 

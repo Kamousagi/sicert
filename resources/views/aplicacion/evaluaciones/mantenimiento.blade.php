@@ -4,7 +4,7 @@
 @section('content')
     <ul class="breadcrumb">
         <li class="breadcrumb-item"><a href="/evaluaciones">Evaluaciones</a></li>
-        <li class="breadcrumb-item active">Nuevo</li>
+        <li class="breadcrumb-item active">Mantenimiento</li>
     </ul>
 
     @if ($errors->any())
@@ -28,28 +28,35 @@
                 <div class="row">
                     <div class="col-2">
                         <label>Código</label>
-                        {!! Form::text('cod_evaluacion', $evaluacion->cod_evaluacion, ['class' => 'form-control', 'readonly', '']) !!}
+                        {!! Form::text('cod_evaluacion', $evaluacion['cod_evaluacion'], ['class' => 'form-control', 'readonly']) !!}
                     </div>
                     <div class="col-2">
                         <label>Grado</label>
-                        {!! Form::selectRange('num_grado', 10, 20, null, ['class' => 'form-control', '']) !!}
+                        {!! Form::selectRange('num_grado', 10, 20, $evaluacion['num_grado'], ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
                     </div>
                     <div class="col-2">
                         <label>Año</label>
-                        {!! Form::selectRange('num_anio', 2016, date('Y'), null, ['class' => 'form-control', '']) !!}
+                        {!! Form::selectRange('num_anio', 2016, date('Y'), $evaluacion['num_anio'], ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
                     </div>
                     <div class="col-2">
                         <label>Correlativo</label>
-                        {!! Form::selectRange('num_correlativo', 1, 300, null, ['class' => 'form-control', '']) !!}
+                        {!! Form::text('num_correlativo', $evaluacion['num_correlativo'], ['class' => 'form-control', 'readonly']) !!}
                     </div>
                     <div class="col-2">
                         <label>Tipo</label>
                         {!! Form::select('num_tipo', array(
-                            null => null,
                             1 => 'Matematica', 
                             2 => 'Comunicacion',
                             3 => 'Ciencias sociales'
-                        ), null, ['class' => 'form-control', '']) !!}
+                        ), $evaluacion['num_tipo'], ['class' => 'form-control', 'placeholder' => 'Seleccione un tipo']) !!}
+                    </div>
+                    <div class="col-2">
+                        <label>Fecha</label>
+                        {!! Form::text('fec_fecha', $evaluacion['fec_fecha'], ['class' => 'form-control datepicker']) !!}
+                    </div>
+                    <div class="col-2">
+                        <label>Procesado</label>
+                        {!! Form::text('ind_procesado', $evaluacion['ind_procesado'], ['class' => 'form-control', 'readonly']) !!}
                     </div>
                 </div>
                     
@@ -70,21 +77,12 @@
                     </tr>                    
                 </thead>
                 <tbody>
-                    @foreach ($evaluacion->detalle as $detalle)
+                    @foreach($evaluacion["detalle"] as $key=>$detalle)
                         <tr>
-                            <td>{{ $detalle->num_pregunta }}</td>
-                            <td>
-                                {!! Form::select('num_respuesta[]', array(
-                                    null => null,
-                                    1 => 1, 
-                                    2 => 2,
-                                    3 => 3,
-                                    4 => 4,
-                                    5 => 5
-                                ), null, ['class' => 'form-control', '']) !!}
-                            </td>
-                            <td>{!! Form::text('nom_mensaje[]', $detalle->nom_mensaje, ['class' => 'form-control', '']) !!}</td>
-                            <td>{!! Form::selectRange('num_peso[]', 1, 5, null, ['class' => 'form-control', '']) !!}</td>
+                            <td>{{ ($key + 1) }}</td>
+                            <td>{!! Form::selectRange("num_respuesta[$key]", 1, 5, $detalle['num_respuesta'], ['class' => 'form-control', 'placeholder' => 'Seleccione una evaluación']) !!}</td>
+                            <td>{!! Form::text("nom_mensaje[$key]", $detalle['nom_mensaje'], ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::selectRange("num_peso[$key]", 1, 5, $detalle['num_peso'], ['class' => 'form-control', 'placeholder' => 'Seleccione una evaluación']) !!}</td>
                         </tr>                    
                     @endforeach
                 </tbody>
@@ -98,14 +96,9 @@
     {!! Form::close() !!}
 
     <script type="text/javascript">
-        // $("#formulario").validate({
-        //     submitHandler: function(form) {
-        //         // some other code
-        //         // maybe disabling submit button
-        //         // then:
-        //         $(form).submit();
-        //     }
-        // });
+        $(document).ready(function(){
+            $(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
+        });
     </script>
 
 @endsection
