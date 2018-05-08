@@ -31,8 +31,12 @@
                         {!! Form::text('cod_evaluacion', $evaluacion['cod_evaluacion'], ['class' => 'form-control', 'readonly']) !!}
                     </div>
                     <div class="col-2">
-                        <label>Grado</label>
-                        {!! Form::selectRange('num_grado', 10, 20, $evaluacion['num_grado'], ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
+                        <label>Grado</label>                        
+                        {!! Form::select('num_grado', array(
+                            1 => '2° DE PRIMARIA', 
+                            2 => '4° DE PRIMARIA',
+                            3 => '2° DE SECUNDARIA'
+                        ), $evaluacion['num_grado'], ['class' => 'form-control', 'placeholder' => 'Seleccione un grado']) !!}
                     </div>
                     <div class="col-2">
                         <label>Año</label>
@@ -47,7 +51,7 @@
                         {!! Form::select('num_tipo', array(
                             1 => 'Matematica', 
                             2 => 'Comunicacion',
-                            3 => 'Ciencias sociales'
+                            3 => 'CTA'
                         ), $evaluacion['num_tipo'], ['class' => 'form-control', 'placeholder' => 'Seleccione un tipo']) !!}
                     </div>
                     <div class="col-2">
