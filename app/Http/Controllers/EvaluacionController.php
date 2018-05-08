@@ -54,24 +54,6 @@ class EvaluacionController extends Controller
 
     public function guardar(Request $solicitud) {
 
-        // $this->validate($solicitud, [
-        //     'cod_evaluacion' => 'required',
-        //     'num_grado' => 'required',
-        //     'num_anio' => 'required',
-        //     'num_correlativo' => 'required',
-        //     'num_tipo' => 'required',
-        //     'num_respuesta.*' => 'required'
-        // ]);
-
-        // $data = $solicitud->validate([
-        //     'cod_evaluacion' => 'required',
-        //     'num_grado' => 'required',
-        //     'num_anio' => 'required',
-        //     'num_correlativo' => 'required',
-        //     'num_tipo' => 'required',
-        //     'num_respuesta.*' => 'required'
-        // ]);
-
         $validator = Validator::make($solicitud->all(), [
             'cod_evaluacion' => 'required',
             'num_grado' => 'required',
@@ -101,6 +83,7 @@ class EvaluacionController extends Controller
         $entidad->num_correlativo = $modelo->num_correlativo;
         $entidad->num_tipo = $modelo->num_tipo;
         $entidad->fec_fecha = date('Y-m-d H:i');
+        $entidad->ind_procesado = 0;
         $entidad->save();
 
         $num_respuesta = $solicitud->input('num_respuesta');
