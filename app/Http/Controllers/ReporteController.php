@@ -374,7 +374,7 @@ class ReporteController extends Controller
             ->where('ind_procesado','=',1)
             ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');
-        $resultados = collect();
+        $resultados = [];
         if ($cod_evaluacion>0){
             $resultados0 = DB::table('consolidado')
             ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')            
@@ -390,7 +390,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as n1')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado.nom_ugel','=',$resultado0->ugel)
-                ->where('consolidado_cabeza.nom_comentario','=','"PREVIO AL INICIO"')            
+                ->where('consolidado_cabeza.nom_comentario','=','PREVIO AL INICIO')            
                 ->get();
                 $resultado2 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -420,12 +420,13 @@ class ReporteController extends Controller
                 $resultado->n2=$resultado2;
                 $resultado->n3=$resultado3;
                 $resultado->n4=$resultado4;
-                $resultado->p1=round($resultado1/$resultado0->nalumnos,2);
-                $resultado->p2=round($resultado2/$resultado0->nalumnos,2);
-                $resultado->p3=round($resultado3/$resultado0->nalumnos,2);
-                $resultado->p4=round($resultado4/$resultado->nalumnos,2);
+                $resultado->p1=round($resultado1[0]->n1/$resultado0->nalumnos,2);
+                $resultado->p2=round($resultado2[0]->n2/$resultado0->nalumnos,2);
+                $resultado->p3=round($resultado3[0]->n3/$resultado0->nalumnos,2);
+                $resultado->p4=round($resultado4[0]->n4/$resultado->nalumnos,2);
                 $num++;
-                $resultados->push($resultado);                
+                //$resultados->push($resultado);                
+                $resultados[] = $resultado;
             }
         }
         return view('aplicacion.reportes.estadistica_resumen', 
