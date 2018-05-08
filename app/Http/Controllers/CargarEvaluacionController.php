@@ -72,7 +72,10 @@ class CargarEvaluacionController extends Controller
                 }
             
                 $institucion = Institucion::with('ugel')->where('num_institucion', $num_institucion)->first();
-
+                if($institucion == null)
+                {
+                    die($num_institucion);
+                }
                 $prueba = new Prueba();
                 $prueba->cod_institucion = $institucion->cod_institucion;
                 $prueba->nom_alumno = $nom_alumno;
