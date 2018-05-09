@@ -12,14 +12,7 @@
 {!! Form::close() !!}
 </td></tr>
 <tr><td>
-{!! Form::open(array('action' => array('ReporteController@estadistica_detallado'))) !!}    
-    {{ Form::hidden('cod_evaluacion', '0') }}
-    {{ Form::hidden('cod_ugel', '0') }}
-    {!! Form::submit('Estadística de la evaluación detallada', ['class' => 'btn btn-primary']) !!}
-{!! Form::close() !!}
-</td></tr>
-<tr><td>
-{!! Form::open(array('action' => array('ReporteController@estadistica_preguntas'))) !!}    
+{!! Form::open(array('action' => array('ReporteController@resumen_preguntas'))) !!}    
     {{ Form::hidden('cod_evaluacion', '0') }}
     {!! Form::submit('Estadística del resultado de las preguntas por Evaluación', ['class' => 'btn btn-primary']) !!}
 {!! Form::close() !!}
@@ -27,12 +20,6 @@
 <tr><td>
 {!! Form::open(array('method' => 'get','action' => array('ReporteController@cronograma_evaluacion'))) !!}    
     {!! Form::submit('Cronograma de evaluaciones pendientes', ['class' => 'btn btn-primary']) !!}
-{!! Form::close() !!}
-</td></tr>
-<tr><td>
-{!! Form::open(array('action' => array('ReporteController@estadistica_aula'))) !!}    
-    {{ Form::hidden('cod_evaluacion', '0') }}
-    {!! Form::submit('Estadistica de la evaluación a nivel de aula', ['class' => 'btn btn-primary']) !!}
 {!! Form::close() !!}
 </td></tr>
 </table>

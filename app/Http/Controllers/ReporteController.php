@@ -45,7 +45,7 @@ class EstadisticaResumenModelo {
     public $p4;
 }
 
-class EstadisticaPreguntasModelo {
+class ResumenPreguntasModelo {
     public $pregunta;
     public $p1;
     public $p2;
@@ -73,7 +73,8 @@ class EstadisticaPreguntasModelo {
     public $p24;
     public $p25;    
 }
-class EstadisticaAulaModelo {
+
+class EstadisticaSeccionModelo {
     public $n;
     public $seccion;
     public $nalumnos;
@@ -85,6 +86,19 @@ class EstadisticaAulaModelo {
     public $p2;
     public $p3;
     public $p4;
+}
+
+class EstadisticaAlumnoModelo {
+    public $n;
+    public $alumno;
+    public $nota;
+    public $nivel;
+}
+
+class EstadisticaPreguntaModelo {
+    public $pregunta;
+    public $respuesta;
+    public $comentario;
 }
 
 class ReporteController extends Controller
@@ -100,69 +114,197 @@ class ReporteController extends Controller
         //die($evaluaciones);
         return view('aplicacion.reportes.cronograma_evaluacion', ['evaluaciones' => $evaluaciones]);
     }
-    public function estadistica_aula()
+
+    public function estadistica_pregunta(Request $request)
     {
-        $evaluaciones = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
-            ->where('ind_procesado','=',1)
-            ->pluck('descripcion', 'cod_evaluacion');
-        $ugeles = Ugel::select(
-            'nom_ugel','nom_ugel')
-            ->pluck('nom_ugel', 'nom_ugel');
-        $instituciones = Institucion::select(
-            'nom_institucion','cod_institucion')
-            ->pluck('nom_institucion', 'cod_institucion');
-        $cod_evaluacion = 1;//$request->input('cod_evaluacion');
-        $cod_ugel = 1;//$request->input('cod_ugel');
-        $cod_institucion=1;
+        $cod_evaluacion = $request->input('cod_evaluacion');
+        $cod_ugel = $request->input('cod_ugel');
+        $cod_institucion = $request->input('cod_institucion');        
+        $nom_seccion = $request->input('nom_seccion');
+        $nom_alumno = $request->input('nom_alumno');
+        $nom_evaluacion = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
+        $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
+        $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;        
+        $grafico = new EstadisticaAlumnoModelo();
+        if ($cod_evaluacion>0){
+            $resultados = DB::table('consolidado')
+            ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
+            ->join('consolidado_cuerpo', 'consolidado_cabeza.cod_consolidado_cabeza', '=', 'consolidado_cuerpo.cod_consolidado_cabeza')
+            ->select('consolidado_cuerpo.num_pregunta as pregunta','consolidado_cuerpo.num_respuesta as respuesta','consolidado_cuerpo.nom_comentario as comentario')
+            ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
+            ->where('consolidado.cod_ugel','=',$cod_ugel)
+            ->where('consolidado.cod_institucion', '=', $cod_institucion)
+            ->where('consolidado_cabeza.nom_seccion', '=', $nom_seccion)
+            ->where('consolidado_cabeza.nom_alumno', '=', $nom_alumno)
+            ->orderBy('consolidado_cuerpo.num_pregunta')
+            ->get();
+        }
+        return view('aplicacion.reportes.estadistica_pregunta',
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'nom_evaluacion_seleccionada' => $nom_evaluacion,
+            'ugel_seleccionada' => $cod_ugel, 'nom_ugel_seleccionada' => $nom_ugel,
+            'institucion_seleccionada' => $cod_institucion, 'nom_institucion_seleccionada' => $nom_institucion,
+            'seccion_seleccionada' => $nom_seccion, 'alumno_seleccionado' => $nom_alumno]);
+    }
+
+    public function estadistica_alumno(Request $request)
+    {
+        $cod_evaluacion = $request->input('cod_evaluacion');
+        $cod_ugel = $request->input('cod_ugel');
+        $cod_institucion = $request->input('cod_institucion');
+        $nom_seccion = $request->input('nom_seccion');
+        $nom_evaluacion = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
+        $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
+        $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;
         $resultados = [];
-        $grafico = new EstadisticaAulaModelo();
+        $grafico = new EstadisticaAlumnoModelo();
         if ($cod_evaluacion>0){
             $resultados0 = DB::table('consolidado')
             ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')            
-            ->selectraw('count(*) as nalumnos, consolidado.num_seccion as seccion')
+            ->selectraw('sum(consolidado_cabeza.num_nota) as nota, consolidado_cabeza.nom_alumno as alumno')
             ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
-            ->where('consolidado.nom_ugel','=',$cod_ugel)
-            ->where('consolidado.nom_institucion', '=', $cod_institucion)
-            ->groupBy('consolidado.num_seccion')
+            ->where('consolidado.cod_ugel','=',$cod_ugel)
+            ->where('consolidado.cod_institucion', '=', $cod_institucion)
+            ->where('consolidado_cabeza.nom_seccion', '=', $nom_seccion)
+            ->groupBy('consolidado_cabeza.nom_alumno')
+            ->get();
+            $num = 1;
+            $nivel1=0; $nivel2=0; $nivel3=0; $nivel4=0;
+            foreach($resultados0 as $resultado0){
+                $resultado = new EstadisticaAlumnoModelo();
+                $resultado1 = DB::table('consolidado')
+                ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
+                ->select('consolidado_cabeza.nom_comentario as nivel')
+                ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
+                ->where('consolidado.cod_ugel','=',$cod_ugel)
+                ->where('consolidado.cod_institucion', '=', $cod_institucion)
+                ->where('consolidado_cabeza.nom_seccion', '=', $nom_seccion)
+                ->where('consolidado_cabeza.nom_alumno','=',$resultado0->alumno)                
+                ->get();
+                $resultado->n=$num;
+                $resultado->alumno=$resultado0->alumno;
+                $resultado->nota=$resultado0->nota;
+                $resultado->nivel=$resultado1[0]->nivel;
+                $num++;
+                $resultados[] = $resultado;
+                switch ($resultado1[0]->nivel) {
+                    case "PREVIO AL INICIO":
+                        $nivel1++;
+                        break;
+                    case "INICIO":
+                        $nivel2++;
+                        break;
+                    case "EN PROCESO":
+                        $nivel3++;
+                        break;
+                    default:
+                        $nivel4++;
+                        break;                    
+                }
+                $grafico->n1=$nivel1;
+                $grafico->n2=$nivel2;
+                $grafico->n3=$nivel3;
+                $grafico->n4=$nivel4;
+            }
+        }
+        $chartjs = app()->chartjs
+        ->name('barChartTest')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 100])
+        ->labels(['Nivel de Progreso'])
+        ->datasets([
+            [
+                "label" => "PREVIO AL INICIO",
+                'backgroundColor' => 'red',
+                'data' => [$grafico->n1]
+            ],
+            [
+                "label" => "INICIO",
+                'backgroundColor' => 'yellow',
+                'data' => [$grafico->n2]
+            ],
+            [
+               "label" => "EN PROCESO",
+               'backgroundColor' => 'blue',
+               'data' => [$grafico->n3]
+           ],
+           [
+               "label" => "LOGRO PREVISTO",
+               'backgroundColor' => 'green',
+               'data' => [$grafico->n4]
+           ]
+        ])
+        ->options([]);
+
+        return view('aplicacion.reportes.estadistica_alumno',
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'nom_evaluacion_seleccionada' => $nom_evaluacion,
+            'ugel_seleccionada' => $cod_ugel, 'nom_ugel_seleccionada' => $nom_ugel,
+            'institucion_seleccionada' => $cod_institucion, 'nom_institucion_seleccionada' => $nom_institucion,
+            'seccion_seleccionada' => $nom_seccion,            
+            'chartjs' => $chartjs]);
+    }
+
+    public function estadistica_seccion(Request $request)
+    {
+        $cod_evaluacion = $request->input('cod_evaluacion');
+        $cod_ugel = $request->input('cod_ugel');
+        $cod_institucion = $request->input('cod_institucion');
+        $nom_evaluacion = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
+        $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
+        $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;
+        $resultados = [];
+        $grafico = new EstadisticaSeccionModelo();
+        if ($cod_evaluacion>0){
+            $resultados0 = DB::table('consolidado')
+            ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')            
+            ->selectraw('count(*) as nalumnos, consolidado_cabeza.nom_seccion as seccion')
+            ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
+            ->where('consolidado.cod_ugel','=',$cod_ugel)
+            ->where('consolidado.cod_institucion', '=', $cod_institucion)
+            ->groupBy('consolidado_cabeza.nom_seccion')
             ->get();
             $num = 1;            
             foreach($resultados0 as $resultado0){
-                $resultado = new EstadisticaAulaModelo();
+                $resultado = new EstadisticaSeccionModelo();
                 $resultado1 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->selectraw('count(*) as n1')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
-                ->where('consolidado.nom_ugel','=',$cod_ugel)
-                ->where('consolidado.nom_institucion', '=', $cod_institucion)
-                ->where('consolidado_cabeza.nom_institucion','=',$resultado0->seccion)
+                ->where('consolidado.cod_ugel','=',$cod_ugel)
+                ->where('consolidado.cod_institucion', '=', $cod_institucion)
+                ->where('consolidado_cabeza.nom_seccion','=',$resultado0->seccion)
                 ->where('consolidado_cabeza.nom_comentario','=','PREVIO AL INICIO')
                 ->get();
                 $resultado2 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->selectraw('count(*) as n2')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
-                ->where('consolidado.nom_ugel','=',$cod_ugel)
-                ->where('consolidado.nom_institucion', '=', $cod_institucion)
-                ->where('consolidado_cabeza.nom_institucion','=',$resultado0->seccion)
+                ->where('consolidado.cod_ugel','=',$cod_ugel)
+                ->where('consolidado.cod_institucion', '=', $cod_institucion)
+                ->where('consolidado_cabeza.nom_seccion','=',$resultado0->seccion)
                 ->where('consolidado_cabeza.nom_comentario','=','INICIO')              
                 ->get();
                 $resultado3 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->selectraw('count(*) as n3')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
-                ->where('consolidado.nom_ugel','=',$cod_ugel)
-                ->where('consolidado.nom_institucion', '=', $cod_institucion)
-                ->where('consolidado_cabeza.nom_institucion','=',$resultado0->seccion)
+                ->where('consolidado.cod_ugel','=',$cod_ugel)
+                ->where('consolidado.cod_institucion', '=', $cod_institucion)
+                ->where('consolidado_cabeza.nom_seccion','=',$resultado0->seccion)
                 ->where('consolidado_cabeza.nom_comentario','=','EN PROCESO')
                 ->get();
                 $resultado4 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->selectraw('count(*) as n4')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
-                ->where('consolidado.nom_ugel','=',$cod_ugel)
-                ->where('consolidado.nom_institucion', '=', $cod_institucion)
-                ->where('consolidado_cabeza.nom_institucion','=',$resultado0->seccion)
+                ->where('consolidado.cod_ugel','=',$cod_ugel)
+                ->where('consolidado.cod_institucion', '=', $cod_institucion)
+                ->where('consolidado_cabeza.nom_seccion','=',$resultado0->seccion)
                 ->where('consolidado_cabeza.nom_comentario','=','LOGRO PREVISTO')      
                 ->get();
                 $resultado->n=$num;
@@ -213,23 +355,21 @@ class ReporteController extends Controller
         ])
         ->options([]);
 
-        return view('aplicacion.reportes.estadistica_detallado',
-            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'ugel_seleccionada' => $cod_ugel,
-            'institucion_seleccionada' => $cod_institucion,
-            'evaluaciones' => $evaluaciones, 'ugeles' => $ugeles, 
-            'instituciones' => $instituciones, 'chartjs' => $chartjs]);
-    }    
+        return view('aplicacion.reportes.estadistica_seccion',
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'nom_evaluacion_seleccionada' => $nom_evaluacion,
+            'ugel_seleccionada' => $cod_ugel, 'nom_ugel_seleccionada' => $nom_ugel,
+            'institucion_seleccionada' => $cod_institucion, 'nom_institucion_seleccionada' => $nom_institucion,
+            'chartjs' => $chartjs]);
+    }
+
     public function estadistica_detallado(Request $request)
     {
-        $evaluaciones = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
-            ->where('ind_procesado','=',1)
-            ->pluck('descripcion', 'cod_evaluacion');
-        $ugeles = Ugel::select(
-            'nom_ugel','nom_ugel')
-            ->pluck('nom_ugel', 'nom_ugel');
         $cod_evaluacion = $request->input('cod_evaluacion');
         $cod_ugel = $request->input('cod_ugel');
+        $nom_evaluacion = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
+        $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
         $resultados = [];
         $grafico = new EstadisticaDetalladoModelo();
         if ($cod_evaluacion>0){
@@ -326,10 +466,12 @@ class ReporteController extends Controller
         ->options([]);
 
         return view('aplicacion.reportes.estadistica_detallado',
-            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'ugel_seleccionada' => $cod_ugel,
-            'evaluaciones' => $evaluaciones, 'ugeles' => $ugeles, 'chartjs' => $chartjs]);
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'nom_evaluacion_seleccionada' => $nom_evaluacion,
+            'ugel_seleccionada' => $cod_ugel, 'nom_ugel_seleccionada' => $nom_ugel,
+            'chartjs' => $chartjs]);
     }
-    public function estadistica_preguntas(Request $request)
+
+    public function resumen_preguntas(Request $request)
     {
         $evaluaciones = Evaluacion::select(
             DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
@@ -337,7 +479,7 @@ class ReporteController extends Controller
             ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');
         $resultados = [];
-        $grafico = new EstadisticaPreguntasModelo();
+        $grafico = new ResumenPreguntasModelo();
         if($cod_evaluacion>0){            
             for($i=0; $i<=4; $i++) {
                 $resultado1 = DB::table('consolidado')
@@ -540,7 +682,7 @@ class ReporteController extends Controller
                 ->where('consolidado_cuerpo.num_pregunta','=',25)
                 ->where('consolidado_cuerpo.num_respuesta','=',$i)
                 ->get();
-                $resultado = new EstadisticaPreguntasModelo();
+                $resultado = new ResumenPreguntasModelo();
                 $resultado->pregunta=$i;
                 $resultado->p1=$resultado1[0]->p1;
                 $resultado->p2=$resultado2[0]->p2;
@@ -728,7 +870,7 @@ class ReporteController extends Controller
             ],
         ])
         ->options([]);
-        return view('aplicacion.reportes.estadistica_preguntas', 
+        return view('aplicacion.reportes.resumen_preguntas', 
             ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'evaluaciones' => $evaluaciones,
             'chartjs' => $chartjs]);
     }
