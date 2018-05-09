@@ -124,8 +124,8 @@ class CargarEvaluacionController extends Controller
 
                 $num_puntaje = ($num_nota * 100) / $num_peso_total;
                 $nom_comentario = $puntajes
-                    ->where('num_minimo', '<=', $num_puntaje)
-                    ->where('num_maximo', '>', $num_puntaje)
+                    ->where('num_minimo', '<', $num_puntaje)
+                    ->where('num_maximo', '>=', $num_puntaje)
                     ->first()
                     ->nom_comentario;
 
