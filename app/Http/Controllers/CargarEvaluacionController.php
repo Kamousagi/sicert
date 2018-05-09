@@ -114,24 +114,25 @@ class CargarEvaluacionController extends Controller
                 $num_nota = 0;
                 for($i=0; $i<25; $i++)
                 {
-                    $num_respuesta_correcta = $evaluacion->detalle->where('num_pregunta', $i + 1)->first()->num_respuesta;
+                    $evaluacionDetalle = $evaluacion->detalle->where('num_pregunta', $i + 1)->first();
                     $num_respuesta_marcada = (int)$nota[$i];
-                    if($num_respuesta_correcta == $num_respuesta_marcada)
+                    if($evaluacionDetalle->num_respuesta == $num_respuesta_marcada)
                     {
-                        $num_nota = (int)$num_nota + (int)$num_respuesta_correcta;
+                        $num_nota = (int)$num_nota + (int)$evaluacionDetalle->num_peso;
                     }
                 }
 
+                $num_puntaje = ($num_nota * 100) / $num_peso_total;
                 $nom_comentario = $puntajes
-                    ->where('num_minimo', '<=', $num_nota)
-                    ->where('num_maximo', '>=', $num_nota)
+                    ->where('num_minimo', '<=', $num_puntaje)
+                    ->where('num_maximo', '>', $num_puntaje)
                     ->first()
                     ->nom_comentario;
 
                 $consolidadoCabeza = new ConsolidadoCabeza();
                 $consolidadoCabeza->nom_alumno = $nom_alumno;
-                $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion
-                $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje
+                $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
+                $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje, calcular entre num_peso_total con num_nota (regla de 3)
                 $consolidadoCabeza->num_seccion = (int)$num_seccion;
               
                 $consolidado->cabeza()->save($consolidadoCabeza);
