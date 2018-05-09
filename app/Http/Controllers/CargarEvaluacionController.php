@@ -70,7 +70,7 @@ class CargarEvaluacionController extends Controller
     
             $num_peso_total = $evaluacion->detalle->sum('num_peso');
             DB::beginTransaction();
-    
+            
             $evaluacion->ind_procesado = 1;
             $evaluacion->save();
     
@@ -90,13 +90,17 @@ class CargarEvaluacionController extends Controller
                     $num_seccion_valor = substr($linea, 90, 2);
                     $num_institucion_valor = substr($linea, 74, 7);
                     $nota_valor = substr($linea, 92, 25);
+                    $nota_valor = str_replace(" ", "0", $nota_valor);
     
                     if (strpos($nota_valor, '*') !== false)
                     {
                         $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
                     }
     
-                    if($num_seccion_valor == "" || $num_seccion_valor == "**")
+                    if(
+                        $num_seccion_valor == "**" ||
+                        $num_seccion_valor == "  "
+                    )
                     {
                         $errores[] = "En la linea $indice, no se encontro una seccón válida.";
                     }
@@ -147,7 +151,11 @@ class CargarEvaluacionController extends Controller
                         }
                     }
     
-                    $num_puntaje = ($num_nota * 100) / $num_peso_total;
+                    $num_puntaje = 0;
+                    if($num_nota > 0){
+                        $num_puntaje = ($num_nota * 100) / $num_peso_total;
+                    }
+                    
                     $nom_comentario = $puntajes
                         ->where('num_minimo', '<', $num_puntaje)
                         ->where('num_maximo', '>=', $num_puntaje)
@@ -187,10 +195,10 @@ class CargarEvaluacionController extends Controller
         }
         catch(Exception $e)
         {
-            die($e);
+            //die($e);
             //dump("triste");
-            //DB::rollBack();
-            //return redirect('/cargar_evaluacion')->withErrors(["errores" => $errores])->withInput();
+            DB::rollBack();
+            return redirect('/cargar_evaluacion')->withErrors(["errores" => $errores])->withInput();
         }
 
         DB::commit();
