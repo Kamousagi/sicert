@@ -102,7 +102,7 @@ class CargarEvaluacionController extends Controller
                         $num_seccion_valor == "  "
                     )
                     {
-                        $errores[] = "En la linea $indice, no se encontro una seccón válida.";
+                        $errores[] = "En la linea $indice, no se encontro una sección válida.";
                     }
                 
                     $institucion = $instituciones->where('num_institucion', $num_institucion_valor)->first();
