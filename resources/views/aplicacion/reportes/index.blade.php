@@ -29,5 +29,11 @@
     {!! Form::submit('Cronograma de evaluaciones pendientes', ['class' => 'btn btn-primary']) !!}
 {!! Form::close() !!}
 </td></tr>
+<tr><td>
+{!! Form::open(array('action' => array('ReporteController@estadistica_aula'))) !!}    
+    {{ Form::hidden('cod_evaluacion', '0') }}
+    {!! Form::submit('Estadistica de la evaluación a nivel de aula', ['class' => 'btn btn-primary']) !!}
+{!! Form::close() !!}
+</td></tr>
 </table>
 @endsection

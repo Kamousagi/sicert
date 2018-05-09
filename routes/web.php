@@ -33,5 +33,6 @@ Route::middleware(['auth'])->group(function()
     Route::get('/reportes/cronograma_evaluacion', 'ReporteController@cronograma_evaluacion');
     Route::post('/reportes/estadistica_detallado', 'ReporteController@estadistica_detallado');
     Route::post('/reportes/estadistica_preguntas', 'ReporteController@estadistica_preguntas');
-    Route::post('/reportes/estadistica_resumen', 'ReporteController@estadistica_resumen');    
+    Route::post('/reportes/estadistica_resumen', 'ReporteController@estadistica_resumen');
+    Route::post('/reportes/estadistica_aula', 'ReporteController@estadistica_aula');
 });
