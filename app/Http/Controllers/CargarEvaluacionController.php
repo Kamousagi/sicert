@@ -112,13 +112,12 @@ class CargarEvaluacionController extends Controller
                     $num_institucion[] = $num_institucion_valor;
                     $nota[] = $nota_valor;
                 }
-
                 if(count($errores))
                 {
                     throw new Exception("Se encontraron advertencias en el archivo");
                 }
 
-                for($i=0; $i<=$indice; $i++)
+                for($i=0; $i<$indice; $i++)
                 {
                     $institucion = $instituciones->where('num_institucion', $num_institucion[$i])->first();
 
@@ -133,6 +132,8 @@ class CargarEvaluacionController extends Controller
                     $consolidado->nom_ugel = $institucion->ugel->nom_ugel;
                     $consolidado->nom_institucion = $institucion->nom_institucion;
                     $consolidado->num_peso_total = $num_peso_total;   //suma detalle evaluacion num_peso
+                    $consolidado->cod_institucion = $institucion->cod_institucion;
+                    $consolidado->cod_ugel = $institucion->cod_ugel;
                     $prueba->consolidado()->save($consolidado);
     
                     $num_nota = 0;
@@ -154,25 +155,28 @@ class CargarEvaluacionController extends Controller
                         ->nom_comentario;
     
                     $consolidadoCabeza = new ConsolidadoCabeza();
-                    $consolidadoCabeza->nom_alumno = $nom_alumno;
+                    $consolidadoCabeza->nom_alumno = $nom_alumno[$i];
                     $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
                     $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje, calcular entre num_peso_total con num_nota (regla de 3)
-                    $consolidadoCabeza->num_seccion = (int)$num_seccion;
+                    
+                    $secciones = "ABCDEFGHIJKLM";
+                    $seccion = $secciones[(int)$num_seccion[$i] - 1];
+                    $consolidadoCabeza->nom_seccion = $seccion;
                   
                     $consolidado->cabeza()->save($consolidadoCabeza);
     
-                    for($i=1; $i<=25; $i++) {
+                    for($j=1; $j<=25; $j++) {
     
                         $pruebaDetalle = new PruebaDetalle();
     
-                        $evalucionDetalle = $evaluacion->detalle->where('num_pregunta', $i)->first();
+                        $evalucionDetalle = $evaluacion->detalle->where('num_pregunta', $j)->first();
                         $pruebaDetalle->cod_evaluacion_detalle = $evalucionDetalle->cod_evaluacion_detalle;
-                        $pruebaDetalle->num_respuesta = (int)$nota[$i - 1];
+                        $pruebaDetalle->num_respuesta = (int)$nota[$i][$j - 1];
                         $prueba->detalle()->save($pruebaDetalle);
     
                         $consolidadoCuerpo = new ConsolidadoCuerpo();
                         $consolidadoCuerpo->num_pregunta = $i;
-                        $consolidadoCuerpo->num_respuesta = (int)$nota[$i - 1];
+                        $consolidadoCuerpo->num_respuesta = (int)$nota[$i][$j - 1];
                         $consolidadoCabeza->cuerpo()->save($consolidadoCuerpo);
                     }
       
@@ -183,8 +187,10 @@ class CargarEvaluacionController extends Controller
         }
         catch(Exception $e)
         {
-            DB::rollBack();
-            return redirect('/cargar_evaluacion')->withErrors(["errores" => $errores])->withInput();
+            die($e);
+            //dump("triste");
+            //DB::rollBack();
+            //return redirect('/cargar_evaluacion')->withErrors(["errores" => $errores])->withInput();
         }
 
         DB::commit();
