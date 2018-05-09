@@ -132,6 +132,7 @@ class CargarEvaluacionController extends Controller
                 $consolidadoCabeza->nom_alumno = $nom_alumno;
                 $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion
                 $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje
+                $consolidadoCabeza->num_seccion = (int)$num_seccion;
               
                 $consolidado->cabeza()->save($consolidadoCabeza);
 
