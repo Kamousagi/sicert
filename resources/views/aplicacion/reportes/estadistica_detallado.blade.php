@@ -39,6 +39,9 @@
             Resultado de la búsqueda
         </div>
         <div class="panel-body">
+            <div style="width:75%;">
+                {!! $chartjs->render() !!}
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -61,10 +64,10 @@
                             <td>{{ $resultado->n }}</td>
                             <td>{{ $resultado->institucion}}</td>
                             <td>{{ $resultado->nalumnos}}</td>
-                            <td>{{ $resultado->n1[0]->n1 }}</td>
-                            <td>{{ $resultado->n2[0]->n2 }}</td>
-                            <td>{{ $resultado->n3[0]->n3 }}</td>
-                            <td>{{ $resultado->n4[0]->n4 }}</td>
+                            <td>{{ $resultado->n1 }}</td>
+                            <td>{{ $resultado->n2 }}</td>
+                            <td>{{ $resultado->n3 }}</td>
+                            <td>{{ $resultado->n4 }}</td>
                             <td>{{ $resultado->p1 }}</td>
                             <td>{{ $resultado->p2 }}</td>
                             <td>{{ $resultado->p3 }}</td>
@@ -74,5 +77,6 @@
                 </tbody>
             </table>
         </div>
-    </div>  
+    </div>
+    
 @endsection

@@ -24,11 +24,11 @@
         <tbody>
         @foreach ($evaluaciones as $evaluacion)
             <tr>
-                <td>{{$evaluacion['fec_fecha']}}</td>
-                <td>{{$evaluacion['num_grado']}}</td>
-                <td>{{$evaluacion['num_tipo']}}</td>
-                <td>{{$evaluacion['num_anio']}}</td>
-                <td>{{$evaluacion['num_correlativo']}}</td>                
+                <td>{{$evaluacion->fec_fecha}}</td>
+                <td>{{$evaluacion->num_grado}}</td>
+                <td>{{$evaluacion->num_tipo}}</td>
+                <td>{{$evaluacion->num_anio}}</td>
+                <td>{{$evaluacion->num_correlativo}}</td>                
             </tr>
         @endforeach                    
         </tbody>

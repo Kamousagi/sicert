@@ -12,6 +12,8 @@
 
   <script src="/js/bootstrap.min.js"></script>
 
+  <script src="/js/Chart.js"></script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css">
 
   <link rel="stylesheet" href="/css/aplicacion.css"/>
