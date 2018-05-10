@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    {!! Form::open(array('action' => array('ReporteController@estadistica_preguntas'))) !!}
+    {!! Form::open(array('action' => array('ReporteController@resumen_preguntas'))) !!}
         <div class="card">
             <div class="card-header">
                 Criterio de búsqueda
@@ -38,7 +38,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>PREGUNTA</th>
+                        <th>RESPUESTA</th>
                         <th>1</th>
                         <th>2</th>
                         <th>3</th>
