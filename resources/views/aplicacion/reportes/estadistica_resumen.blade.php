@@ -30,11 +30,15 @@
             </div>
         </div>
     {!! Form::close() !!}
+
     <div class="panel panel-default">
         <div class="panel-heading">
             Resultado de la búsqueda
         </div>
         <div class="panel-body">
+            <div style="width:75%;">
+                {!! $chartjs->render() !!}
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -49,6 +53,7 @@
                         <th>% INICIO</th>
                         <th>% EN PROCESO</th>
                         <th>% LOGRO PREVISTO</th>
+                        <th>VER</th>
                     </tr>                    
                 </thead>
                 <tbody>
@@ -57,19 +62,25 @@
                             <td>{{ $resultado->n }}</td>
                             <td>{{ $resultado->ugel}}</td>
                             <td>{{ $resultado->nalumnos}}</td>
-                            <td>{{ $resultado->n1[0]->n1 }}</td>
-                            <td>{{ $resultado->n2[0]->n2 }}</td>
-                            <td>{{ $resultado->n3[0]->n3 }}</td>
-                            <td>{{ $resultado->n4[0]->n4 }}</td>
+                            <td>{{ $resultado->n1 }}</td>
+                            <td>{{ $resultado->n2 }}</td>
+                            <td>{{ $resultado->n3 }}</td>
+                            <td>{{ $resultado->n4 }}</td>
                             <td>{{ $resultado->p1 }}</td>
                             <td>{{ $resultado->p2 }}</td>
                             <td>{{ $resultado->p3 }}</td>
                             <td>{{ $resultado->p4 }}</td>
+                            <td>
+                            {!! Form::open(array('action' => array('ReporteController@estadistica_detallado'))) !!}
+                                {{ Form::hidden('cod_evaluacion', $evaluacion_seleccionada) }}
+                                {{ Form::hidden('cod_ugel', $resultado->cod_ugel) }}
+                                {!! Form::submit('Ver', ['class' => 'btn btn-success']) !!}
+                            {!! Form::close() !!}
+                            </td>
                         </tr>
-                    @endforeach                    
+                    @endforeach
                 </tbody>
             </table>            
         </div>
-    </div>
-            
+    </div>            
 @endsection

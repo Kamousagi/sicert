@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function()
     Route::get('/reportes', function () { return view('aplicacion.reportes.index'); });
     Route::get('/reportes/cronograma_evaluacion', 'ReporteController@cronograma_evaluacion');
     Route::post('/reportes/estadistica_detallado', 'ReporteController@estadistica_detallado');
-    Route::post('/reportes/estadistica_preguntas', 'ReporteController@estadistica_preguntas');
-    Route::post('/reportes/estadistica_resumen', 'ReporteController@estadistica_resumen');    
+    Route::post('/reportes/resumen_preguntas', 'ReporteController@resumen_preguntas');
+    Route::post('/reportes/estadistica_resumen', 'ReporteController@estadistica_resumen');
+    Route::post('/reportes/estadistica_seccion', 'ReporteController@estadistica_seccion');
+    Route::post('/reportes/estadistica_alumno', 'ReporteController@estadistica_alumno');
+    Route::post('/reportes/estadistica_pregunta', 'ReporteController@estadistica_pregunta');
 });

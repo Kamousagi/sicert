@@ -1,6 +1,6 @@
 @extends('layout.aplicacion')
 @section('content')
-<h1>Estadística de la evaluación detallada</h1>
+<h1>Estadística de la evaluación por sección</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -12,6 +12,7 @@
         </div>
     @endif
 
+    
         <div class="card">
             <div class="card-header">
                 Criterio de búsqueda
@@ -24,9 +25,13 @@
                     <div class="col-3">
                         <label>Ugel: {{$nom_ugel_seleccionada}}</label>                        
                     </div>
+                    <div class="col-3">
+                        <label>Institución: {{$nom_institucion_seleccionada}}</label>                        
+                    </div>
                 </div>
-            </div>
+            </div>    
         </div>
+    
     <div class="panel panel-default">
         <div class="panel-heading">
             Resultado de la búsqueda
@@ -39,7 +44,7 @@
                 <thead>
                     <tr>
                         <th>Nº</th>
-                        <th>INSTITUCION EDUCATIVA</th>
+                        <th>SECCION</th>
                         <th>N° EST</th>
                         <th>PREVIO AL INICIO</th>
                         <th>INICIO</th>
@@ -50,13 +55,13 @@
                         <th>% EN PROCESO</th>
                         <th>% LOGRO PREVISTO</th>
                         <th>VER</th>
-                    </tr>
+                    </tr>                    
                 </thead>
                 <tbody>
                     @foreach ($resultados as $resultado)
                         <tr>
                             <td>{{ $resultado->n }}</td>
-                            <td>{{ $resultado->institucion}}</td>
+                            <td>{{ $resultado->seccion}}</td>
                             <td>{{ $resultado->nalumnos}}</td>
                             <td>{{ $resultado->n1 }}</td>
                             <td>{{ $resultado->n2 }}</td>
@@ -67,10 +72,11 @@
                             <td>{{ $resultado->p3 }}</td>
                             <td>{{ $resultado->p4 }}</td>
                             <td>
-                            {!! Form::open(array('action' => array('ReporteController@estadistica_seccion'))) !!}
+                            {!! Form::open(array('action' => array('ReporteController@estadistica_alumno'))) !!}
                                 {{ Form::hidden('cod_evaluacion', $evaluacion_seleccionada) }}
                                 {{ Form::hidden('cod_ugel', $ugel_seleccionada) }}
-                                {{ Form::hidden('cod_institucion', $resultado->cod_institucion) }}
+                                {{ Form::hidden('cod_institucion', $institucion_seleccionada) }}
+                                {{ Form::hidden('nom_seccion', $resultado->seccion) }}
                                 {!! Form::submit('Ver', ['class' => 'btn btn-success']) !!}
                             {!! Form::close() !!}
                             </td>

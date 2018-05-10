@@ -14,8 +14,31 @@ class EvaluacionController extends Controller
     
     public function index()
     {
-        $evaluaciones = Evaluacion::all();       
-        return view('aplicacion.evaluaciones.index', ['evaluaciones' => $evaluaciones]);
+        $evaluaciones = Evaluacion::all();
+        $modelo = [];
+        // 1 => '2° DE PRIMARIA', 
+        // 2 => '4° DE PRIMARIA',
+        // 3 => '2° DE SECUNDARIA'
+        foreach($evaluaciones as $evaluacion)
+        {
+            $nom_grado = "?";
+            if ($evaluacion->num_grado == 1) {
+                $nom_grado = "2° DE PRIMARIA";
+            } elseif ($evaluacion->num_grado == 2) {
+                $nom_grado = "4° DE PRIMARIA";
+            } elseif ($evaluacion->num_grado == 3) {
+                $nom_grado = "2° DE SECUNDARIA";
+            }
+
+            $modelo[] = [
+                'cod_evaluacion' => $evaluacion->cod_evaluacion,
+                'num_grado' => $nom_grado,
+                'num_anio' => $evaluacion->num_anio,
+                'num_correlativo' => $evaluacion->num_correlativo,
+                'num_tipo' => $evaluacion->num_tipo
+            ];
+        }
+        return view('aplicacion.evaluaciones.index', ['evaluaciones' => $modelo]);
     }
 
     public function getNuevo()

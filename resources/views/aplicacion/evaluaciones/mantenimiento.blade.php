@@ -49,8 +49,8 @@
                     <div class="col-2">
                         <label>Tipo</label>
                         {!! Form::select('num_tipo', array(
-                            1 => 'Matematica', 
-                            2 => 'Comunicacion',
+                            1 => 'MATEMATICA', 
+                            2 => 'COMUNICACION',
                             3 => 'CTA'
                         ), $evaluacion['num_tipo'], ['class' => 'form-control', 'placeholder' => 'Seleccione un tipo']) !!}
                     </div>
@@ -84,9 +84,9 @@
                     @foreach($evaluacion["detalle"] as $key=>$detalle)
                         <tr>
                             <td>{{ ($key + 1) }}</td>
-                            <td>{!! Form::selectRange("num_respuesta[$key]", 1, 5, $detalle['num_respuesta'], ['class' => 'form-control', 'placeholder' => 'Seleccione una evaluación']) !!}</td>
+                            <td>{!! Form::selectRange("num_respuesta[$key]", 1, 4, $detalle['num_respuesta'], ['class' => 'form-control', 'placeholder' => 'Seleccione una respuesta']) !!}</td>
                             <td>{!! Form::text("nom_mensaje[$key]", $detalle['nom_mensaje'], ['class' => 'form-control']) !!}</td>
-                            <td>{!! Form::selectRange("num_peso[$key]", 1, 5, $detalle['num_peso'], ['class' => 'form-control', 'placeholder' => 'Seleccione una evaluación']) !!}</td>
+                            <td>{!! Form::selectRange("num_peso[$key]", 1, 10, $detalle['num_peso'], ['class' => 'form-control', 'placeholder' => 'Seleccione un peso']) !!}</td>
                         </tr>                    
                     @endforeach
                 </tbody>

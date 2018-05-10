@@ -15,6 +15,12 @@
         </div>
     @endif
 
+    @if (session('exito'))
+        <div class="alert alert-success">
+            {{ session('exito') }}
+        </div>
+    @endif
+
     {!! Form::open(array('url' => 'cargar_evaluacion/guardar', 'method' => 'post', 'files' => true)) !!}
     
         <div class="card">
