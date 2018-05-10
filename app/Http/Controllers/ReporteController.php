@@ -132,7 +132,7 @@ class ReporteController extends Controller
             $resultados = DB::table('consolidado')
             ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
             ->join('consolidado_cuerpo', 'consolidado_cabeza.cod_consolidado_cabeza', '=', 'consolidado_cuerpo.cod_consolidado_cabeza')
-            ->select('consolidado_cuerpo.num_pregunta as pregunta','consolidado_cuerpo.num_respuesta as respuesta','consolidado_cuerpo.nom_comentario as comentario')
+            ->select('consolidado_cuerpo.num_pregunta as pregunta','consolidado_cuerpo.nom_respuesta as respuesta','consolidado_cuerpo.nom_comentario as comentario')
             ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
             ->where('consolidado.cod_ugel','=',$cod_ugel)
             ->where('consolidado.cod_institucion', '=', $cod_institucion)
@@ -481,14 +481,31 @@ class ReporteController extends Controller
         $resultados = [];
         $grafico = new ResumenPreguntasModelo();
         if($cod_evaluacion>0){            
-            for($i=0; $i<=4; $i++) {
+            for($j=0; $j<=4; $j++) {
+                switch ($j) {
+                    case 0:
+                        $i="EN BLANCO";
+                        break;
+                    case 1:
+                        $i="A";
+                        break;
+                    case 2:
+                        $i="B";
+                        break;
+                    case 3:
+                        $i="C";
+                        break;
+                    case 4:
+                        $i="D";
+                        break;                    
+                }
                 $resultado1 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->join('consolidado_cuerpo', 'consolidado_cabeza.cod_consolidado_cabeza', '=', 'consolidado_cuerpo.cod_consolidado_cabeza')
                 ->selectraw('count(*) as p1')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',1)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado2 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -496,7 +513,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p2')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',2)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado3 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -504,7 +521,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p3')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',3)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado4 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -512,7 +529,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p4')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',4)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado5 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -520,7 +537,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p5')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',5)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado6 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -528,7 +545,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p6')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',6)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado7 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -536,7 +553,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p7')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',7)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado8 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -544,7 +561,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p8')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',8)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado9 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -552,7 +569,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p9')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',9)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado10 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -560,7 +577,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p10')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',10)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado11 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -568,7 +585,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p11')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',11)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado12 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -576,7 +593,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p12')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',12)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado13 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -584,7 +601,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p13')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',13)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado14 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -592,7 +609,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p14')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',14)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado15 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -600,7 +617,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p15')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',15)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado16 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -608,7 +625,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p16')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',16)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado17 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -616,7 +633,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p17')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',17)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado18 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -624,7 +641,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p18')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',18)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado19 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -632,7 +649,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p19')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',19)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado20 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -640,7 +657,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p20')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',20)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado21 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -648,7 +665,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p21')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',21)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado22 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -656,7 +673,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p22')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',22)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado23 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -664,7 +681,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p23')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',23)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado24 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -672,7 +689,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p24')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',24)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado25 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
@@ -680,7 +697,7 @@ class ReporteController extends Controller
                 ->selectraw('count(*) as p25')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
                 ->where('consolidado_cuerpo.num_pregunta','=',25)
-                ->where('consolidado_cuerpo.num_respuesta','=',$i)
+                ->where('consolidado_cuerpo.nom_respuesta','=',$i)
                 ->get();
                 $resultado = new ResumenPreguntasModelo();
                 $resultado->pregunta=$i;
