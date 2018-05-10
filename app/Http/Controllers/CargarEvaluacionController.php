@@ -37,7 +37,10 @@ class CargarEvaluacionController extends Controller
             ->where('ind_procesado', '0')
             ->pluck('descripcion', 'cod_evaluacion');
 
-        return view('aplicacion.cargar_evaluacion.index', ['modelo' => $modelo, 'evaluaciones' => $evaluaciones]);
+        return view('aplicacion.cargar_evaluacion.index', [
+            'modelo' => $modelo, 
+            'evaluaciones' => $evaluaciones
+        ]);
     }
 
     public function guardar(Request $solicitud) {
@@ -140,7 +143,10 @@ class CargarEvaluacionController extends Controller
                     $consolidado->cod_ugel = $institucion->cod_ugel;
                     $prueba->consolidado()->save($consolidado);
     
+                    $secciones = "ABCDEFGHIJKLM";
+                    $notas = "ABCDEFGHIJKLM";
                     $num_nota = 0;
+
                     for($j=0; $j<25; $j++)
                     {
                         $evaluacionDetalle = $evaluacion->detalle->where('num_pregunta', $j + 1)->first();
@@ -167,24 +173,37 @@ class CargarEvaluacionController extends Controller
                     $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
                     $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje, calcular entre num_peso_total con num_nota (regla de 3)
                     
-                    $secciones = "ABCDEFGHIJKLM";
                     $seccion = $secciones[(int)$num_seccion[$i] - 1];
                     $consolidadoCabeza->nom_seccion = $seccion;
                   
                     $consolidado->cabeza()->save($consolidadoCabeza);
     
-                    for($j=1; $j<=25; $j++) {
+                    for($j=0; $j<25; $j++) {
     
                         $pruebaDetalle = new PruebaDetalle();
     
-                        $evalucionDetalle = $evaluacion->detalle->where('num_pregunta', $j)->first();
+                        $evalucionDetalle = $evaluacion->detalle->where('num_pregunta', $j + 1)->first();
                         $pruebaDetalle->cod_evaluacion_detalle = $evalucionDetalle->cod_evaluacion_detalle;
-                        $pruebaDetalle->num_respuesta = (int)$nota[$i][$j - 1];
+                        $pruebaDetalle->num_respuesta = (int)$nota[$i][$j];
                         $prueba->detalle()->save($pruebaDetalle);
     
                         $consolidadoCuerpo = new ConsolidadoCuerpo();
-                        $consolidadoCuerpo->num_pregunta = $i;
-                        $consolidadoCuerpo->num_respuesta = (int)$nota[$i][$j - 1];
+                        $consolidadoCuerpo->num_pregunta = $j + 1;
+
+                        $val_nota = (int)$nota[$i][$j];
+                        $nom_respuesta = "EN BLANCO";
+                        if($val_nota > 0) 
+                        {
+                            $nom_respuesta = $notas[$val_nota - 1];
+                        }
+
+                        $nom_comentario = "CORRECTO";
+                        if($val_nota != $evalucionDetalle->num_respuesta)
+                        {
+                            $nom_comentario = $evalucionDetalle->nom_mensaje;
+                        }
+                        $consolidadoCuerpo->nom_respuesta = $nom_respuesta;
+                        $consolidadoCuerpo->nom_comentario = $nom_comentario;
                         $consolidadoCabeza->cuerpo()->save($consolidadoCuerpo);
                     }
       
@@ -203,6 +222,6 @@ class CargarEvaluacionController extends Controller
 
         DB::commit();
 
-        return redirect('/cargar_evaluacion');
+        return redirect('/cargar_evaluacion')->with('exito', 'La carga de evaluación se realizo correctamente');
     }
 }
