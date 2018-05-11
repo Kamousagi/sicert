@@ -37,4 +37,7 @@ Route::middleware(['auth'])->group(function()
     Route::post('/reportes/estadistica_seccion', 'ReporteController@estadistica_seccion');
     Route::post('/reportes/estadistica_alumno', 'ReporteController@estadistica_alumno');
     Route::post('/reportes/estadistica_pregunta', 'ReporteController@estadistica_pregunta');
+
+    Route::get('/cambiar_clave', 'CambiarClaveController@getIndex');
+    Route::post('/cambiar_clave', 'CambiarClaveController@postIndex');
 });
