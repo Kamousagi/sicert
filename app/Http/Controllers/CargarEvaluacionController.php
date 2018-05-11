@@ -85,20 +85,39 @@ class CargarEvaluacionController extends Controller
                 $nom_alumno = [];
                 $num_seccion = [];
                 $num_institucion = [];
-                $nota = [];
 
-                foreach($data as $linea) {
+                foreach($data as $linea) {                    
+                    $array_linea = explode(';',$linea);                    
                     $indice++;
-                    $nom_alumno_valor = trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
-                    $num_seccion_valor = substr($linea, 90, 2);
-                    $num_institucion_valor = substr($linea, 74, 7);
-                    $nota_valor = substr($linea, 92, 25);
-                    $nota_valor = str_replace(" ", "0", $nota_valor);
-    
-                    if (strpos($nota_valor, '*') !== false)
-                    {
-                        $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
-                    }
+                    $nom_alumno_valor = $array_linea[7];// trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
+                    $num_seccion_valor = $array_linea[20] . $array_linea[21];// substr($linea, 90, 2);
+                    $num_institucion_valor = $array_linea[16];// substr($linea, 74, 7);
+                    
+                    for($a=22; $a<47; $a++)
+                    {                        
+                        if ($array_linea[$a] == "*")
+                        {
+                            $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
+                            $nota[$indice-1][$a-22] = "0";
+                        }
+                        else
+                        {
+                            if ($array_linea[$a] == "")
+                            {
+                                $nota[$indice-1][$a-22] = "0";
+                            }
+                            else 
+                            {
+                                $nota[$indice-1][$a-22] = $array_linea[$a];
+                            }
+                        }                                                
+                    }                    
+                    //$nota_valor = substr($linea, 92, 25);
+                    //$nota_valor = str_replace(" ", "0", $nota_valor);    
+                    // if (strpos($nota_valor, '*') !== false)
+                    // {
+                    //     $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
+                    // }
     
                     if(
                         $num_seccion_valor == "**" ||
@@ -115,9 +134,9 @@ class CargarEvaluacionController extends Controller
                     }
 
                     $nom_alumno[] = $nom_alumno_valor;
-                    $num_seccion[] = $num_seccion_valor;
-                    $num_institucion[] = $num_institucion_valor;
-                    $nota[] = $nota_valor;
+                    $num_seccion[] = (int)$num_seccion_valor;
+                    $num_institucion[] = $num_institucion_valor;                    
+                    //$nota[$indice] = str_split($nota_valor);
                 }
                 if(count($errores))
                 {
@@ -126,6 +145,7 @@ class CargarEvaluacionController extends Controller
 
                 for($i=0; $i<$indice; $i++)
                 {
+                    
                     $institucion = $instituciones->where('num_institucion', $num_institucion[$i])->first();
 
                     $prueba = new Prueba();
@@ -133,7 +153,7 @@ class CargarEvaluacionController extends Controller
                     $prueba->nom_alumno = $nom_alumno[$i];
                     $prueba->num_seccion = (int)$num_seccion[$i];
                     $prueba->save();
-    
+                    
                     $consolidado = new Consolidado();
                     $consolidado->cod_evaluacion = $cod_evaluacion;
                     $consolidado->nom_ugel = $institucion->ugel->nom_ugel;
@@ -142,21 +162,20 @@ class CargarEvaluacionController extends Controller
                     $consolidado->cod_institucion = $institucion->cod_institucion;
                     $consolidado->cod_ugel = $institucion->cod_ugel;
                     $prueba->consolidado()->save($consolidado);
-    
+                    
                     $secciones = "ABCDEFGHIJKLM";
                     $notas = "ABCDEFGHIJKLM";
                     $num_nota = 0;
-
+                                        
                     for($j=0; $j<25; $j++)
                     {
-                        $evaluacionDetalle = $evaluacion->detalle->where('num_pregunta', $j + 1)->first();
-                        $num_respuesta_marcada = (int)$nota[$i][$j];
+                        $evaluacionDetalle = $evaluacion->detalle->where('num_pregunta', $j + 1)->first();                        
+                        $num_respuesta_marcada = $nota[$i][$j];
                         if($evaluacionDetalle->num_respuesta == $num_respuesta_marcada)
                         {
                             $num_nota = (int)$num_nota + (int)$evaluacionDetalle->num_peso;
-                        }
+                        }                     
                     }
-    
                     $num_puntaje = 0;
                     if($num_nota > 0){
                         $num_puntaje = ($num_nota * 100) / $num_peso_total;
@@ -167,7 +186,6 @@ class CargarEvaluacionController extends Controller
                         ->where('num_maximo', '>=', $num_puntaje)
                         ->first()
                         ->nom_comentario;
-    
                     $consolidadoCabeza = new ConsolidadoCabeza();
                     $consolidadoCabeza->nom_alumno = $nom_alumno[$i];
                     $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
