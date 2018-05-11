@@ -124,7 +124,7 @@ class ReporteController extends Controller
         $nom_seccion = $request->input('nom_seccion');
         $nom_alumno = $request->input('nom_alumno');
         $nom_evaluacion = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS nom_evaluacion"))
             ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
         $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
         $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;        
@@ -156,7 +156,7 @@ class ReporteController extends Controller
         $cod_institucion = $request->input('cod_institucion');
         $nom_seccion = $request->input('nom_seccion');
         $nom_evaluacion = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS nom_evaluacion"))
             ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
         $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
         $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;
@@ -254,7 +254,7 @@ class ReporteController extends Controller
         $cod_ugel = $request->input('cod_ugel');
         $cod_institucion = $request->input('cod_institucion');
         $nom_evaluacion = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS nom_evaluacion"))
             ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
         $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
         $nom_institucion = Institucion::where('cod_institucion','=',$cod_institucion)->first()->nom_institucion;
@@ -368,7 +368,7 @@ class ReporteController extends Controller
         $cod_evaluacion = $request->input('cod_evaluacion');
         $cod_ugel = $request->input('cod_ugel');
         $nom_evaluacion = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS nom_evaluacion"))
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS nom_evaluacion"))
             ->where('cod_evaluacion','=',$cod_evaluacion)->first()->nom_evaluacion;
         $nom_ugel = Ugel::where('cod_ugel','=',$cod_ugel)->first()->nom_ugel;
         $resultados = [];
@@ -475,7 +475,7 @@ class ReporteController extends Controller
     public function resumen_preguntas(Request $request)
     {
         $evaluaciones = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS descripcion"),'cod_evaluacion')
             ->where('ind_procesado','=',1)
             ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');
@@ -896,7 +896,7 @@ class ReporteController extends Controller
     public function estadistica_resumen(Request $request)
     {
         $evaluaciones = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS descripcion"),'cod_evaluacion')
             ->where('ind_procesado','=',1)
             ->pluck('descripcion', 'cod_evaluacion');
         $cod_evaluacion = $request->input('cod_evaluacion');

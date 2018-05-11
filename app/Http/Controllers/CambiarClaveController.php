@@ -75,6 +75,6 @@ class CambiarClaveController extends Controller
         $usuario->nom_clave = $nueva_clave;
         $usuario->save();
 
-        return redirect('/cambiar_clave')->with('exito', 'La carga de evaluación se realizo correctamente');
+        return redirect('/cambiar_clave')->with('exito', 'El cambio de clave se realizó correctamente');
     }
 }
