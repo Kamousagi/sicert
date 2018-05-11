@@ -12,8 +12,7 @@
         </div>
         <table class="table table-striped table-hover table-hover table-sm">
             <thead>
-                <tr>
-                    <th style="width: 20%">Código</th>
+                <tr>                    
                     <th style="width: 20%">Grado</th>
                     <th style="width: 20%">Año</th>
                     <th style="width: *">Correlativo</th>
@@ -23,7 +22,6 @@
             <tbody>
                 @foreach($evaluaciones as $evaluacion)
                 <tr>
-                    <td>{{$evaluacion['cod_evaluacion']}}</td>
                     <td>{{$evaluacion['num_grado']}}</td>
                     <td>{{$evaluacion['num_anio']}}</td>
                     <td>{{$evaluacion['num_correlativo']}}</td>

@@ -105,7 +105,7 @@ class CargarEvaluacionController extends Controller
                 $num_institucion = [];
 
                 foreach($data as $linea) {                    
-                    $array_linea = explode(';',$linea);                    
+                    $array_linea = explode(';',$linea);
                     $indice++;
                     $nom_alumno_valor = $array_linea[7];// trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
                     $num_seccion_valor = $array_linea[20] . $array_linea[21];// substr($linea, 90, 2);
@@ -139,7 +139,7 @@ class CargarEvaluacionController extends Controller
     
                     if(
                         $num_seccion_valor == "**" ||
-                        $num_seccion_valor == "  "
+                        $num_seccion_valor == ""
                     )
                     {
                         $errores[] = "En la linea $indice, no se encontro una sección válida.";
@@ -242,9 +242,7 @@ class CargarEvaluacionController extends Controller
                         $consolidadoCuerpo->nom_comentario = $nom_comentario;
                         $consolidadoCabeza->cuerpo()->save($consolidadoCuerpo);
                     }
-      
                 }
-    
             }
             
         }
