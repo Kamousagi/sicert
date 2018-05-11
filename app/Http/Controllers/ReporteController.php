@@ -110,6 +110,7 @@ class ReporteController extends Controller
         'num_correlativo','num_anio',
         DB::raw("(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END) AS num_tipo"),
         DB::raw("(CASE WHEN num_grado = 1 THEN '2° DE PRIMARIA' WHEN num_grado = 2 THEN '4° DE PRIMARIA' ELSE '2° DE SECUNDARIA' END) AS num_grado"))
+        ->where('ind_procesado','=',0)
         ->get();
         //die($evaluaciones);
         return view('aplicacion.reportes.cronograma_evaluacion', ['evaluaciones' => $evaluaciones]);
