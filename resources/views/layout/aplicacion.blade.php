@@ -117,6 +117,7 @@
   <!-- Bootstrap core JavaScript-->
   <script src="/js/jquery.js"></script>
   <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/chart.js"></script>
 
   <!-- Custom scripts for all pages-->
   <script src="/js/sb-admin.min.js"></script>
