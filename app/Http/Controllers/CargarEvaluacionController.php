@@ -32,10 +32,28 @@ class CargarEvaluacionController extends Controller
         $modelo = new CargarEvaluacionModelo();
         $modelo->cod_evaluacion = 0;
 
-        $evaluaciones = Evaluacion::select(
-            DB::raw("CONCAT(NUM_ANIO,' ',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
-            ->where('ind_procesado', '0')
-            ->pluck('descripcion', 'cod_evaluacion');
+        // $evaluaciones = Evaluacion::select(
+        //     DB::raw("CONCAT(NUM_ANIO,' ',NUM_CORRELATIVO) AS descripcion"),'cod_evaluacion')
+        //     ->where('ind_procesado', '0')
+        //     ->pluck('descripcion', 'cod_evaluacion');
+
+        $resultado = Evaluacion::where('ind_procesado', '0')->get();
+        $evaluaciones = [];
+
+        foreach($resultado as $evaluacion) {
+
+            $nom_tipo = "?";            
+            if ($evaluacion->num_tipo == 1) {
+                $nom_tipo = "MATEMATICA";
+            } elseif ($evaluacion->num_tipo == 2) {
+                $nom_tipo = "COMUNICACION";
+            } elseif ($evaluacion->num_tipo == 3) {
+                $nom_tipo = "CTA";
+            }
+
+            $evaluaciones[$evaluacion->cod_evaluacion] = "$evaluacion->num_anio - $evaluacion->num_correlativo - $nom_tipo";
+
+        }
 
         return view('aplicacion.cargar_evaluacion.index', [
             'modelo' => $modelo, 

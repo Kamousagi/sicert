@@ -30,12 +30,21 @@ class EvaluacionController extends Controller
                 $nom_grado = "2° DE SECUNDARIA";
             }
 
+            $nom_tipo = "?";
+            if ($evaluacion->num_tipo == 1) {
+                $nom_tipo = "MATEMATICA";
+            } elseif ($evaluacion->num_tipo == 2) {
+                $nom_tipo = "COMUNICACION";
+            } elseif ($evaluacion->num_tipo == 3) {
+                $nom_tipo = "CTA";
+            }
+
             $modelo[] = [
                 'cod_evaluacion' => $evaluacion->cod_evaluacion,
                 'num_grado' => $nom_grado,
                 'num_anio' => $evaluacion->num_anio,
                 'num_correlativo' => $evaluacion->num_correlativo,
-                'num_tipo' => $evaluacion->num_tipo
+                'num_tipo' => $nom_tipo
             ];
         }
         return view('aplicacion.evaluaciones.index', ['evaluaciones' => $modelo]);
