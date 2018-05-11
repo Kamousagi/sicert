@@ -11,6 +11,7 @@ use Validator;
 
 class EvaluacionController extends Controller
 {
+    
     public function index()
     {
         $evaluaciones = Evaluacion::all();
@@ -193,4 +194,5 @@ class EvaluacionController extends Controller
 
         return view('aplicacion.evaluaciones.mantenimiento', ['evaluacion' => $evaluacion]);
     }
+
 }
