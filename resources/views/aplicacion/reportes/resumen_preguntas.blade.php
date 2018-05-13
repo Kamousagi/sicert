@@ -1,7 +1,8 @@
 @extends('layout.aplicacion')
 @section('content')
-<h1>Estadística del resultado de las preguntas por Evaluación</h1>
-
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Estadística del resultado de las preguntas por Evaluación</li>
+    </ul>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -18,20 +19,23 @@
                 Criterio de búsqueda
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-3">
-                        <label>Evaluación</label>
-                        {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
+
+                <div class="form-group row">
+                    <label class="col-sm-1">Evaluacion</label>
+                    <div class="col-sm-3">
+                            {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="col-sm-2">
+                            {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}
                     </div>
                 </div>
-            </div>
-            <div class="card-footer text-right">
-                {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}
+
             </div>
         </div>
     {!! Form::close() !!}
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <br>
+    <div class="panel">
+        <div class="panel-header">
             Resultado de la búsqueda
         </div>
         <div class="panel-body">            

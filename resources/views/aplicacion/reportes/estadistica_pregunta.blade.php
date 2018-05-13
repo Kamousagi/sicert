@@ -1,7 +1,12 @@
 @extends('layout.aplicacion')
 @section('content')
-<h1>Estadística de la evaluación por pregunta</h1>
-
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Estadística de la evaluación resumida</li>
+        <li class="breadcrumb-item active">Detallada</li>
+        <li class="breadcrumb-item active">Por sección</li>
+        <li class="breadcrumb-item active">Por alumno</li>
+        <li class="breadcrumb-item active">Por pregunta</li>
+    </ul>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -18,53 +23,43 @@
                 Criterio de búsqueda
             </div>
             <div class="card-body">
+
                 <div class="row">
-                    <div class="col-3">
-                        <label>Evaluación: {{$nom_evaluacion_seleccionada}}</label>                        
-                    </div>
-                    <div class="col-3">
-                        <label>Ugel: {{$nom_ugel_seleccionada}}</label>                        
-                    </div>
-                    <div class="col-3">
-                        <label>Institución: {{$nom_institucion_seleccionada}}</label>                        
-                    </div>
-                    <div class="col-3">
-                        <label>Sección: {{$seccion_seleccionada}}</label>                        
-                    </div>
-                    <div class="col-3">
-                        <label>Alumno: {{$alumno_seleccionado}}</label>                        
-                    </div>
+                    <label class="col-sm-3">Evaluacion {{$nom_evaluacion_seleccionada}}</label>
+                    <label class="col-sm-1">Ugel {{$nom_ugel_seleccionada}}</label>
+                    <label class="col-sm-4">Institución {{$nom_institucion_seleccionada}}</label>
+                    <label class="col-sm-1">Sección {{$seccion_seleccionada}}</label>
+                    <label class="col-sm-2">Alumno: {{$alumno_seleccionado}}</label>
                 </div>
             </div>
         </div>
     @if (count($resultados)>0)
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <br>
+    <div class="card">
+        <div class="card-header">
             Resultado de la búsqueda
         </div>
-        <div class="panel-body">
-            <table class="table">
-                <thead>
+        <table class="table table-striped table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>PREGUNTA</th>
+                    <th>RESPUESTA</th>
+                    <th>COMENTARIO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($resultados as $resultado)
                     <tr>
-                        <th>PREGUNTA</th>
-                        <th>RESPUESTA</th>
-                        <th>COMENTARIO</th>
+                        <td>{{ $resultado->pregunta }}</td>
+                        <td>{{ $resultado->respuesta }}</td>
+                        <td>{{ $resultado->comentario }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($resultados as $resultado)
-                        <tr>
-                            <td>{{ $resultado->pregunta }}</td>
-                            <td>{{ $resultado->respuesta }}</td>
-                            <td>{{ $resultado->comentario }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+        </table>
     </div>
     @else
-    <div class="panel-heading">
+    <div class="card-heading">
         No se encontraron registros.    
     </div>
     @endif    
