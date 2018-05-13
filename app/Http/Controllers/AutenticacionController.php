@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 //use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use App\Institucion;
 
 class AutenticacionController extends Controller
 {
@@ -45,10 +46,41 @@ class AutenticacionController extends Controller
             ->where('nom_clave', '=', $nom_clave)->first();
         
         //if (Auth::attempt(['nom_usuario' => $nom_usuario, 'nom_clave' => $nom_clave]))
+        
         if ($auth)
         {
             // De ser datos válidos nos mandara a la bienvenida
             Auth::login($auth);
+            switch ($auth->num_tipo) {
+                case 1:
+                case 2:
+                    $request->session()->put('cod_ugel',0);
+                    $request->session()->put('cod_institucion',0);
+                    break;
+                case 3:
+                    switch (strtoupper($auth->nom_usuario)) {
+                        case "UTACNA":
+                            $request->session()->put('cod_ugel',1);
+                            break;
+                        case "UTARATA":
+                            $request->session()->put('cod_ugel',2);
+                            break;
+                        case "UCANDARAVE":
+                            $request->session()->put('cod_ugel',3);
+                            break;
+                        case "UBASADRE":
+                            $request->session()->put('cod_ugel',4);
+                            break;
+                    }
+                    $request->session()->put('cod_institucion',0);
+                    break;
+                case 4:
+                    $cod_ugel = Institucion::where('cod_institucion','=',$auth->cod_institucion)->cod_ugel;
+                    $request->session()->put('cod_ugel',$cod_ugel);
+                    $request->session()->put('cod_institucion',$auth->cod_institucion);
+                    break;                    
+            }
+            $request->session()->put('num_tipo_usuario', $auth->num_tipo);
             return Redirect::to('/');
         }
         // En caso de que la autenticación haya fallado manda un mensaje al formulario de login y también regresamos los valores enviados con withInput().

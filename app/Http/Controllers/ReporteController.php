@@ -251,7 +251,7 @@ class ReporteController extends Controller
 
     public function estadistica_seccion(Request $request)
     {        
-        $tipo_usuario = 4;
+        $tipo_usuario = $request->session()->get('num_tipo_usuario');;
         switch ($tipo_usuario) {
             case 1:
             case 2:                
@@ -261,8 +261,8 @@ class ReporteController extends Controller
                 $ind_form = 0;
                 break;
             case 4:
-                $cod_ugel = 1;
-                $cod_institucion = 65;
+                $cod_ugel = $request->session()->get('cod_ugel');
+                $cod_institucion = $request->session()->get('cod_institucion');;
                 $ind_form = 1;
                 break;                    
         }
@@ -386,8 +386,8 @@ class ReporteController extends Controller
     }
 
     public function estadistica_detallado(Request $request)
-    {
-        $tipo_usuario = 4;
+    {        
+        $tipo_usuario = $request->session()->get('num_tipo_usuario');
         switch ($tipo_usuario) {
             case 1:
             case 2:
@@ -395,7 +395,7 @@ class ReporteController extends Controller
                 $ind_form = 0;
                 break;
             case 3:
-                $cod_ugel = 1;
+                $cod_ugel = $request->session()->get('cod_ugel');
                 $ind_form = 1;
                 break;
             case 4:
@@ -939,7 +939,7 @@ class ReporteController extends Controller
     
     public function estadistica_resumen(Request $request)
     {
-        $tipo_usuario = 1;
+        $tipo_usuario = $request->session()->get('num_tipo_usuario');;
         if ($tipo_usuario == 1 || $tipo_usuario == 2)
         {
             $evaluaciones = Evaluacion::select(
@@ -1047,16 +1047,14 @@ class ReporteController extends Controller
         }
     }
 
-    public function estadistica_reporte()
+    public function estadistica_reporte(Request $request)
     {
-        $request = new Request();
         $request->replace(['cod_evaluacion' => 0]);
         return $this->estadistica_resumen($request);
     }
 
-    public function resumen_pregunta()
+    public function resumen_pregunta(Request $request)
     {
-        $request = new Request();
         $request->replace(['cod_evaluacion' => 0]);
         return $this->resumen_preguntas($request);
     }
