@@ -12,6 +12,7 @@
         </div>
     @endif
 
+    @if ($ind_form == 0)
         <div class="card">
             <div class="card-header">
                 Criterio de búsqueda
@@ -27,6 +28,30 @@
                 </div>
             </div>
         </div>
+    @else
+        {!! Form::open(array('action' => array('ReporteController@estadistica_detallado'))) !!}
+        <div class="card">
+            <div class="card-header">
+                Criterio de búsqueda
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Evaluación:</label>
+                        {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="col-3">
+                        <label>Ugel: {{$nom_ugel_seleccionada}}</label>                       
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                {!! Form::submit('Buscar', ['class' => 'btn btn-success']) !!}
+            </div>
+        </div>
+        {!! Form::close() !!}
+    @endif
+    @if (count($resultados)>0)
     <div class="panel panel-default">
         <div class="panel-heading">
             Resultado de la búsqueda
@@ -80,5 +105,9 @@
             </table>
         </div>
     </div>
-    
+    @else
+    <div class="panel-heading">
+        No se encontraron registros.    
+    </div>
+    @endif
 @endsection

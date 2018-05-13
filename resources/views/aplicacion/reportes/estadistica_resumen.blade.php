@@ -30,7 +30,7 @@
             </div>
         </div>
     {!! Form::close() !!}
-
+    @if (count($resultados)>0)
     <div class="panel panel-default">
         <div class="panel-heading">
             Resultado de la búsqueda
@@ -82,5 +82,10 @@
                 </tbody>
             </table>            
         </div>
-    </div>            
+    </div>
+    @else
+    <div class="panel-heading">
+        No se encontraron registros.    
+    </div>
+    @endif
 @endsection

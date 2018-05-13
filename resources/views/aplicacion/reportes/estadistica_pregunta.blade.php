@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-    
+    @if (count($resultados)>0)
     <div class="panel panel-default">
         <div class="panel-heading">
             Resultado de la búsqueda
@@ -63,5 +63,9 @@
             </table>
         </div>
     </div>
-    
+    @else
+    <div class="panel-heading">
+        No se encontraron registros.    
+    </div>
+    @endif    
 @endsection

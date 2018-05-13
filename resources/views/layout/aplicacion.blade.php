@@ -45,13 +45,13 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="navbar.html">Estadística de la evaluación resumida</a>
+              <a href="/reportes/estadistica_reporte">Estadística de la evaluación resumida</a>
             </li>
             <li>
-              <a href="cards.html">Estadística del resultado de las preguntas por Evaluación</a>
+              <a href="/reportes/resumen_pregunta">Estadística del resultado de las preguntas por Evaluación</a>
             </li>
             <li>
-              <a href="cards.html">Cronograma de evaluaciones pendientes</a>
+              <a href="/reportes/cronograma_evaluacion">Cronograma de evaluaciones pendientes</a>
             </li>
           </ul>
         </li>
