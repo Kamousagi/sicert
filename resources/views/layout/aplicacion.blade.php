@@ -65,6 +65,9 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
+          <a class="nav-link disabled" href="#"><i class="fa fa-fw fa-user"></i> {!! Auth::User()->nom_usuario !!}</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/cambiar_clave">
             <i class="fa fa-fw fa-user"></i>Cambiar clave</a>
         </li>
