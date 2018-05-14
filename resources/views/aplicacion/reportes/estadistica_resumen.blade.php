@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
 
-                <div class="form-group row">
+                <div class="row">
                     <label class="col-sm-1">Evaluacion</label>
                     <div class="col-sm-3">
                         {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
@@ -91,8 +91,8 @@
         </table>     
     </div>
     @else
-    <div class="card-heading">
-        No se encontraron registros.    
-    </div>
+        <div class="alert alert-warning" role="alert">
+            No se encontraron registros.    
+        </div>
     @endif
 @endsection

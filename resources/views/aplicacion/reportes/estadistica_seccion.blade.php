@@ -23,7 +23,7 @@
                 Criterio de búsqueda
             </div>
             <div class="card-body">
-                <div class="form-group row">
+                <div class="row">
                     <label class="col-sm-1">Evaluacion</label>
                     <label class="col-sm-2">{{$nom_evaluacion_seleccionada}}</label>
                     <label class="col-sm-1 text-right">Ugel</label>
@@ -40,7 +40,7 @@
                 Criterio de búsqueda
             </div>
             <div class="card-body">
-                <div class="form-group row">
+                <div class="row">
                     <label class="col-sm-1">Evaluacion</label>
                     <div class="col-sm-2">
                         {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}

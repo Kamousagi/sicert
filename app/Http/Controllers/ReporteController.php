@@ -251,7 +251,7 @@ class ReporteController extends Controller
 
     public function estadistica_seccion(Request $request)
     {        
-        $tipo_usuario = $request->session()->get('num_tipo_usuario');;
+        $tipo_usuario = $request->session()->get('num_tipo_usuario');
         switch ($tipo_usuario) {
             case 1:
             case 2:                
@@ -262,7 +262,7 @@ class ReporteController extends Controller
                 break;
             case 4:
                 $cod_ugel = $request->session()->get('cod_ugel');
-                $cod_institucion = $request->session()->get('cod_institucion');;
+                $cod_institucion = $request->session()->get('cod_institucion');
                 $ind_form = 1;
                 break;                    
         }
@@ -939,7 +939,7 @@ class ReporteController extends Controller
     
     public function estadistica_resumen(Request $request)
     {
-        $tipo_usuario = $request->session()->get('num_tipo_usuario');;
+        $tipo_usuario = $request->session()->get('num_tipo_usuario');
         if ($tipo_usuario == 1 || $tipo_usuario == 2)
         {
             $evaluaciones = Evaluacion::select(

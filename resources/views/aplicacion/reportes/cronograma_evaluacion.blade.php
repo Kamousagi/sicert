@@ -1,6 +1,9 @@
 @extends('layout.aplicacion')
 @section('content')
-<h1>Cronograma de evaluaciones pendientes</h1>
+
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Cronograma de evaluaciones pendientes</li>
+    </ul>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -11,7 +14,7 @@
             </ul>
         </div>
     @endif
-    <table class="table">
+    <table class="table table-striped table-bordered table-hover table-sm">
         <thead>
             <tr>
                 <th>FECHA</th>
