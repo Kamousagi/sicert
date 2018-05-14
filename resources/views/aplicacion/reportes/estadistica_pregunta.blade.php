@@ -25,10 +25,10 @@
             <div class="card-body">
 
                 <div class="row">
-                    <label class="col-sm-3">Evaluacion {{$nom_evaluacion_seleccionada}}</label>
-                    <label class="col-sm-1">Ugel {{$nom_ugel_seleccionada}}</label>
-                    <label class="col-sm-4">Institución {{$nom_institucion_seleccionada}}</label>
-                    <label class="col-sm-1">Sección {{$seccion_seleccionada}}</label>
+                    <label class="col-sm-3">Evaluacion: {{$nom_evaluacion_seleccionada}}</label>
+                    <label class="col-sm-2">Ugel: {{$nom_ugel_seleccionada}}</label>
+                    <label class="col-sm-4">Institución: {{$nom_institucion_seleccionada}}</label>
+                    <label class="col-sm-1">Sección: {{$seccion_seleccionada}}</label>
                     <label class="col-sm-2">Alumno: {{$alumno_seleccionado}}</label>
                 </div>
             </div>

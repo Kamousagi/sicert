@@ -24,11 +24,11 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <label class="col-sm-1">Evaluacion</label>
+                    <label class="col-sm-1">Evaluacion:</label>
                     <label class="col-sm-2">{{$nom_evaluacion_seleccionada}}</label>
-                    <label class="col-sm-1 text-right">Ugel</label>
+                    <label class="col-sm-1 text-right">Ugel:</label>
                     <label class="col-sm-1">{{$nom_ugel_seleccionada}}</label>
-                    <label class="col-sm-1 text-right">Institución</label>
+                    <label class="col-sm-1 text-right">Institución:</label>
                     <label class="col-sm-4">{{$nom_institucion_seleccionada}}</label>
                 </div>
             </div>    

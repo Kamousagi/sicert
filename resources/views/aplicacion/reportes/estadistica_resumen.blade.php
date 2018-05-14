@@ -23,7 +23,7 @@
             <div class="card-body">
 
                 <div class="row">
-                    <label class="col-sm-1">Evaluacion</label>
+                    <label class="col-sm-1">Evaluacion:</label>
                     <div class="col-sm-3">
                         {!! Form::select('cod_evaluacion', $evaluaciones, $evaluacion_seleccionada, ['class' => 'form-control']) !!}
                     </div>
