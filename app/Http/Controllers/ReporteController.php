@@ -513,6 +513,7 @@ class ReporteController extends Controller
             }
             $num = 1;
             foreach($entidad->detalle()->get() as $detalle)
+            {
                 $resultado1 = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')
                 ->join('consolidado_cuerpo', 'consolidado_cabeza.cod_consolidado_cabeza', '=', 'consolidado_cuerpo.cod_consolidado_cabeza')
@@ -565,9 +566,9 @@ class ReporteController extends Controller
                 $grafico->p2=$grafico->p2+$resultado->p2;
                 $grafico->p3=$grafico->p3+$resultado->p3;
                 $grafico->p4=$grafico->p4+$resultado->p4;
-                $grafico->p5=$grafico->p5+$resultado->p5;
+                $grafico->p5=$grafico->p5+$resultado->p5;                
             }            
-        }
+        }        
         $chartjs = app()->chartjs
         ->name('barChartTest')
         ->type('bar')
