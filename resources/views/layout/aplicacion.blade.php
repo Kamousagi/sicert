@@ -53,6 +53,9 @@
             <li>
               <a href="/reportes/cronograma_evaluacion">Cronograma de evaluaciones pendientes</a>
             </li>
+            <li>
+              <a href="/reportes/alumno_discapacitado">Alumnos discapacitados por Evaluación</a>
+            </li>
           </ul>
         </li>
       </ul>

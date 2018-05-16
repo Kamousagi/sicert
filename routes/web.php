@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function()
     Route::post('/reportes/estadistica_pregunta', 'ReporteController@estadistica_pregunta');
     Route::get('/reportes/estadistica_reporte', 'ReporteController@estadistica_reporte');
     Route::get('/reportes/resumen_pregunta', 'ReporteController@resumen_pregunta');
+    Route::post('/reportes/alumnos_discapacitados', 'ReporteController@alumnos_discapacitados');
+    Route::get('/reportes/alumno_discapacitado', 'ReporteController@alumno_discapacitado');
 
     Route::get('/cambiar_clave', 'CambiarClaveController@getIndex');
     Route::post('/cambiar_clave', 'CambiarClaveController@postIndex');

@@ -82,6 +82,14 @@ class EstadisticaPreguntaModelo {
     public $comentario;
 }
 
+class AlumnosDiscapacitados {
+    public $n;
+    public $ugel;
+    public $institucion;
+    public $seccion;
+    public $alumno;
+}
+
 class ReporteController extends Controller
 {
     public function cronograma_evaluacion()
@@ -566,7 +574,8 @@ class ReporteController extends Controller
                 $grafico->p2=$grafico->p2+$resultado->p2;
                 $grafico->p3=$grafico->p3+$resultado->p3;
                 $grafico->p4=$grafico->p4+$resultado->p4;
-                $grafico->p5=$grafico->p5+$resultado->p5;                
+                $grafico->p5=$grafico->p5+$resultado->p5;
+                $num++;
             }            
         }        
         $chartjs = app()->chartjs
@@ -717,6 +726,45 @@ class ReporteController extends Controller
         }
     }
 
+    public function alumnos_discapacitados(Request $request)
+    {        
+        $evaluaciones = Evaluacion::select(
+            DB::raw("CONCAT(NUM_ANIO,'-',NUM_CORRELATIVO,'-',(CASE WHEN num_tipo = 1 THEN 'MATEMATICA' WHEN num_tipo = 2 THEN 'COMUNICACION' ELSE 'CTA' END)) AS descripcion"),'cod_evaluacion')
+            ->where('ind_procesado','=',1)
+            ->pluck('descripcion', 'cod_evaluacion');
+        $cod_evaluacion = $request->input('cod_evaluacion');
+        $resultados = [];
+        if($cod_evaluacion>0){
+            $entidad = Evaluacion::where('cod_evaluacion', $cod_evaluacion)->first();            
+            if(!$entidad)
+            {
+                die("no existe");
+            }
+            $num = 1;
+            $resultadototal = DB::table('consolidado')
+                ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')                
+                ->select('consolidado.nom_ugel as ugel')
+                ->select('consolidado.nom_institucion as institucion')
+                ->select('consolidado_cabeza.nom_seccion as seccion')
+                ->select('consolidado_cabeza.nom_alumno as alumno')
+                ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
+                ->get();
+            foreach($resultadototal as $resultado1)
+            {   
+                $resultado = new AlumnosDiscapacitados();
+                $resultado->n=$num;
+                $resultado->ugel=$resultado1->ugel;
+                $resultado->institucion=$resultado1->institucion;
+                $resultado->seccion=$resultado1->seccion;
+                $resultado->alumno=$resultado1->alumno;                
+                $resultados[]=$resultado;
+                $num++;         
+            }            
+        }        
+        return view('aplicacion.reportes.alumnos_discapacitados', 
+            ['resultados' => $resultados,'evaluacion_seleccionada' => $cod_evaluacion, 'evaluaciones' => $evaluaciones]);
+    }
+
     public function estadistica_reporte(Request $request)
     {
         $request->replace(['cod_evaluacion' => 0]);
@@ -727,5 +775,11 @@ class ReporteController extends Controller
     {
         $request->replace(['cod_evaluacion' => 0]);
         return $this->resumen_preguntas($request);
+    }
+
+    public function alumno_discapacitado(Request $request)
+    {
+        $request->replace(['cod_evaluacion' => 0]);
+        return $this->alumnos_discapacitados($request);
     }
 }
