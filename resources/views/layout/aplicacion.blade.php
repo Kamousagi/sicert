@@ -15,6 +15,19 @@
   <!-- Custom styles for this template-->
   <link href="/css/sb-admin.css" rel="stylesheet">
   <link href="/css/aplicacion.css" rel="stylesheet">
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/chart.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/js/sb-admin.min.js"></script>
+  
+  <script src="/js/jquery-ui.min.js"></script>
+  <link href="/css/jquery-ui.min.css" rel="stylesheet">
+
 </head>
 
 <body class="fixed-nav bg-dark" id="page-top">
@@ -120,14 +133,6 @@
 
   </div>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="/js/jquery.js"></script>
-  <script src="/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/chart.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="/js/sb-admin.min.js"></script>
-  
 </body>
 
 </html>

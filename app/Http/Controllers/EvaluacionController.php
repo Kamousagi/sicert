@@ -50,8 +50,9 @@ class EvaluacionController extends Controller
         return view('aplicacion.evaluaciones.index', ['evaluaciones' => $modelo]);
     }
 
-    public function getNuevo()
+    public function getNuevo($cantidad_preguntas)
     {
+        $cantidad_preguntas = (int)$cantidad_preguntas;
         $evaluacion = [
             'cod_evaluacion' => 0,
             'num_grado' => 0,
@@ -59,10 +60,11 @@ class EvaluacionController extends Controller
             'num_correlativo' => 0,
             'num_tipo' => 0,
             'fec_fecha' => '',
-            'ind_procesado' => "NO PROCESADO"
+            'ind_procesado' => "NO PROCESADO",
+            'cantidad_preguntas' => $cantidad_preguntas
         ];
 
-        for($i=0; $i<25; $i++)
+        for($i=0; $i<$cantidad_preguntas; $i++)
         {
             $evaluacion["detalle"][] = [
                 'num_respuesta' => null,
@@ -82,7 +84,9 @@ class EvaluacionController extends Controller
             'fec_fecha.required' => 'Seleccione una fecha de evaluación'
         ];
 
-        for ($i=0; $i<25; $i++)
+        $cantidad_preguntas = $solicitud->input('cantidad_preguntas');
+
+        for ($i=0; $i<$cantidad_preguntas; $i++)
         {
             $messages['num_respuesta.'.$i.'.required'] = "Seleccione una respuesta para el detalle ".($i+1);
             $messages['nom_mensaje.'.$i.'.required'] = "Seleccione un mensaje para el detalle ".($i+1);
@@ -104,7 +108,7 @@ class EvaluacionController extends Controller
         $redireccionar = "";
         if($cod_evaluacion == 0)
         {
-            $redireccionar = "/evaluaciones/nuevo";
+            $redireccionar = "/evaluaciones/nuevo/$cantidad_preguntas";
         } else {
             $redireccionar = "/evaluaciones/editar/".$cod_evaluacion;
         }
@@ -142,13 +146,13 @@ class EvaluacionController extends Controller
             $evaluacion->ind_procesado = 0;
             $evaluacion->save();
 
-            for ($i=0; $i<25; $i++)
+            for ($i=0; $i<$cantidad_preguntas; $i++)
             {
                 $evaluacionDetalle = new EvaluacionDetalle();
                 $evaluacionDetalle->num_pregunta = $i + 1;
                 $evaluacionDetalle->num_respuesta = $num_respuesta[$i];
                 $evaluacionDetalle->nom_mensaje = $nom_mensaje[$i];
-                $evaluacionDetalle->num_peso = $num_peso[$i];
+                $evaluacionDetalle->num_peso = (int)$num_peso[$i];
                 $evaluacion->detalle()->save($evaluacionDetalle);
             }
 
@@ -160,12 +164,12 @@ class EvaluacionController extends Controller
             $evaluacion->num_tipo = $num_tipo;
             $evaluacion->fec_fecha = $fec_fecha;
 
-            for ($i=0; $i<25; $i++)
+            for ($i=0; $i<$cantidad_preguntas; $i++)
             {
                 $detalle = $evaluacion->detalle()->where('num_pregunta', ($i + 1))->first();
                 $detalle->num_respuesta = $num_respuesta[$i];
                 $detalle->nom_mensaje = $nom_mensaje[$i];
-                $detalle->num_peso = $num_peso[$i];
+                $detalle->num_peso = (int)$num_peso[$i];
                 $detalle->save();
             }
 
@@ -189,7 +193,8 @@ class EvaluacionController extends Controller
             'num_correlativo' => $entidad->num_correlativo,
             'num_tipo' => $entidad->num_tipo,
             'fec_fecha' => $entidad->fec_fecha,
-            'ind_procesado' => $entidad->ind_procesado == 0 ? "NO PROCESADO" : "PROCESADO"
+            'ind_procesado' => $entidad->ind_procesado == 0 ? "NO PROCESADO" : "PROCESADO",
+            'cantidad_preguntas' => $entidad->detalle()->count()
         ];
 
         foreach($entidad->detalle()->get() as $detalle)
