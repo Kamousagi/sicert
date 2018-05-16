@@ -22,7 +22,7 @@ Route::middleware(['auth', 'administrador'])->group(function()
     Route::post('/cargar_evaluacion/guardar', 'CargarEvaluacionController@guardar');
 
     Route::get('/evaluaciones', 'EvaluacionController@index');
-    Route::get('/evaluaciones/nuevo', 'EvaluacionController@getNuevo');
+    Route::get('/evaluaciones/nuevo/{cantidad_preguntas}', 'EvaluacionController@getNuevo');
     Route::get('/evaluaciones/editar/{cod_evaluacion}', 'EvaluacionController@getEditar');
     Route::post('/evaluaciones/guardar', 'EvaluacionController@postGuardar');
 });

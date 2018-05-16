@@ -17,7 +17,10 @@
                     <th style="width: 20%">Año</th>
                     <th style="width: *">Correlativo</th>
                     <th style="width: 30%">Tipo</th>
-                    <th style="width: 10%"><a href="/evaluaciones/nuevo" class="btn btn-sm btn-success">Agregar <i class="fa fa-plus-circle"></i></a></th>
+                    <th style="width: 10%">
+                        {{-- <a href="/evaluaciones/nuevo" class="btn btn-sm btn-success">Agregar <i class="fa fa-plus-circle"></i></a> --}}
+                        <button class="btn btn-sm btn-success" onclick="$('#nuevo').modal('show');">Agregar</button>
+                    </th>
                 </tr>
             <tbody>
                 @foreach($evaluaciones as $evaluacion)
@@ -32,5 +35,30 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal" id="nuevo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Cantidad de preguntas</label>
+                        <input type="text" class="form-control input-sm" id="cantidad-preguntas">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-success" onclick="crearEvaluacion()">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function crearEvaluacion() {
+            cantidadPreguntas = document.getElementById("cantidad-preguntas").value;
+            window.location.href = "/evaluaciones/nuevo/" + cantidadPreguntas;
+        }
+    </script>
 
 @endsection

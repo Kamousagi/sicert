@@ -18,7 +18,7 @@
     @endif
 
     {!! Form::open(['url' => 'evaluaciones/guardar', 'id'=>"formulario"]) !!}
-
+        {!! Form::hidden('cantidad_preguntas', $evaluacion['cantidad_preguntas']) !!}
         <div class="card">
             <div class="card-header">
                 Mantenimiento de evaluacion
@@ -84,9 +84,16 @@
                     @foreach($evaluacion["detalle"] as $key=>$detalle)
                         <tr>
                             <td>{{ ($key + 1) }}</td>
-                            <td>{!! Form::selectRange("num_respuesta[$key]", 1, 4, $detalle['num_respuesta'], ['class' => 'form-control', 'placeholder' => 'Seleccione una respuesta']) !!}</td>
+                            <td>
+                                {!! Form::select("num_respuesta[$key]", array(
+                                    1 => 'A', 
+                                    2 => 'B',
+                                    3 => 'C',
+                                    4 => 'D',
+                                ), $detalle['num_respuesta'], ['class' => 'form-control', 'placeholder' => 'Seleccione un tipo']) !!}
+                            </td>
                             <td>{!! Form::text("nom_mensaje[$key]", $detalle['nom_mensaje'], ['class' => 'form-control']) !!}</td>
-                            <td>{!! Form::selectRange("num_peso[$key]", 1, 10, $detalle['num_peso'], ['class' => 'form-control', 'placeholder' => 'Seleccione un peso']) !!}</td>
+                            <td>{!! Form::text("num_peso[$key]", $detalle['num_peso'], ['class' => 'form-control']) !!}
                         </tr>                    
                     @endforeach
                 </tbody>

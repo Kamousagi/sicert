@@ -90,6 +90,7 @@ class CargarEvaluacionController extends Controller
             $instituciones = Institucion::with('ugel')->get();
     
             $num_peso_total = $evaluacion->detalle->sum('num_peso');
+            $num_preguntas = $evaluacion->detalle->count();
             DB::beginTransaction();
             
             $evaluacion->ind_procesado = 1;
@@ -130,13 +131,7 @@ class CargarEvaluacionController extends Controller
                             }
                         }                                                
                     }                    
-                    //$nota_valor = substr($linea, 92, 25);
-                    //$nota_valor = str_replace(" ", "0", $nota_valor);    
-                    // if (strpos($nota_valor, '*') !== false)
-                    // {
-                    //     $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
-                    // }
-    
+
                     if(
                         $num_seccion_valor == "**" ||
                         $num_seccion_valor == ""
@@ -185,7 +180,7 @@ class CargarEvaluacionController extends Controller
                     $notas = "ABCDEFGHIJKLM";
                     $num_nota = 0;
                                         
-                    for($j=0; $j<25; $j++)
+                    for($j=0; $j<$num_preguntas; $j++)
                     {
                         $evaluacionDetalle = $evaluacion->detalle->where('num_pregunta', $j + 1)->first();                        
                         $num_respuesta_marcada = $nota[$i][$j];
@@ -206,7 +201,7 @@ class CargarEvaluacionController extends Controller
                         ->nom_comentario;
                     $consolidadoCabeza = new ConsolidadoCabeza();
                     $consolidadoCabeza->nom_alumno = $nom_alumno[$i];
-                    $consolidadoCabeza->num_nota = $num_nota;   //25 pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
+                    $consolidadoCabeza->num_nota = $num_nota;   //n pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
                     $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje, calcular entre num_peso_total con num_nota (regla de 3)
                     
                     $seccion = $secciones[(int)$num_seccion[$i] - 1];
@@ -214,7 +209,7 @@ class CargarEvaluacionController extends Controller
                   
                     $consolidado->cabeza()->save($consolidadoCabeza);
     
-                    for($j=0; $j<25; $j++) {
+                    for($j=0; $j<$num_preguntas; $j++) {
     
                         $pruebaDetalle = new PruebaDetalle();
     
