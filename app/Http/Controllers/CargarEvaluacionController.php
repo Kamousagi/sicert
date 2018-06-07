@@ -108,11 +108,12 @@ class CargarEvaluacionController extends Controller
                 foreach($data as $linea) {                    
                     $array_linea = explode(';',$linea);
                     $indice++;
+                    $ind_discapacitado_valor = $array_linea[6];
                     $nom_alumno_valor = $array_linea[7];// trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
                     $num_seccion_valor = $array_linea[20] . $array_linea[21];// substr($linea, 90, 2);
                     $num_institucion_valor = $array_linea[16];// substr($linea, 74, 7);
                     
-                    for($a=22; $a<47; $a++)
+                    for($a=22; $a<22+$num_preguntas; $a++)
                     {                        
                         if ($array_linea[$a] == "*")
                         {
@@ -130,7 +131,15 @@ class CargarEvaluacionController extends Controller
                                 $nota[$indice-1][$a-22] = $array_linea[$a];
                             }
                         }                                                
-                    }                    
+                    }
+
+                    if(
+                        $ind_discapacitado_valor == "*" ||
+                        $ind_discapacitado_valor == ""
+                    )
+                    {
+                        $errores[] = "En la linea $indice, no se encontro el indicador de discapacitado.";
+                    }
 
                     if(
                         $num_seccion_valor == "**" ||
@@ -145,10 +154,11 @@ class CargarEvaluacionController extends Controller
                     {
                         $errores[] = "En la linea $indice, no se encontro la institución con código $num_institucion_valor.";
                     }
-
+                    
+                    $ind_discapacitado[] = $ind_discapacitado_valor;
                     $nom_alumno[] = $nom_alumno_valor;
                     $num_seccion[] = (int)$num_seccion_valor;
-                    $num_institucion[] = $num_institucion_valor;                    
+                    $num_institucion[] = $num_institucion_valor;
                     //$nota[$indice] = str_split($nota_valor);
                 }
                 if(count($errores))
@@ -165,6 +175,7 @@ class CargarEvaluacionController extends Controller
                     $prueba->cod_institucion = $institucion->cod_institucion;
                     $prueba->nom_alumno = $nom_alumno[$i];
                     $prueba->num_seccion = (int)$num_seccion[$i];
+                    $prueba->ind_discapacitado = $ind_discapacitado[$i];
                     $prueba->save();
                     
                     $consolidado = new Consolidado();
@@ -200,6 +211,7 @@ class CargarEvaluacionController extends Controller
                         ->first()
                         ->nom_comentario;
                     $consolidadoCabeza = new ConsolidadoCabeza();
+                    $consolidadoCabeza->ind_discapacitado = $ind_discapacitado[$i];
                     $consolidadoCabeza->nom_alumno = $nom_alumno[$i];
                     $consolidadoCabeza->num_nota = $num_nota;   //n pregunta , sumar las respuestas acertadas con el detalle de evaluacion <- si coinciden usar el peso del detalle de evaluacion
                     $consolidadoCabeza->nom_comentario = $nom_comentario; //de puntaje, calcular entre num_peso_total con num_nota (regla de 3)

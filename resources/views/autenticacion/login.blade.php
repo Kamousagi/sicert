@@ -24,9 +24,11 @@
             @endif
 
             <div class="card card-login mx-auto mt-5">
-
-              <div class="card-header">Ingresar al SICERT</div>
-              <div class="card-body">
+              <img src="/css/images/logo_ugel.png" class="img-thumbnail">
+              <div class="card-header">                
+                <h3 class="text-center font-weight-bold">BIENVENIDO A SICERT</h3>
+              </div>
+              <div class="card-body">                
                 {{ Form::open(array('url' => '/login')) }}
                   <div class="form-group">
                     {{ Form::label('usuario', 'Nombre de usuario') }}

@@ -744,10 +744,11 @@ class ReporteController extends Controller
             $resultadototal = DB::table('consolidado')
                 ->join('consolidado_cabeza', 'consolidado.cod_consolidado', '=', 'consolidado_cabeza.cod_consolidado')                
                 ->select('consolidado.nom_ugel as ugel')
-                ->select('consolidado.nom_institucion as institucion')
-                ->select('consolidado_cabeza.nom_seccion as seccion')
-                ->select('consolidado_cabeza.nom_alumno as alumno')
+                ->selectraw('consolidado.nom_institucion as institucion')
+                ->selectraw('consolidado_cabeza.nom_seccion as seccion')
+                ->selectraw('consolidado_cabeza.nom_alumno as alumno')
                 ->where('consolidado.cod_evaluacion','=',$cod_evaluacion)
+                ->where('consolidado_cabeza.ind_discapacitado','=',1)
                 ->get();
             foreach($resultadototal as $resultado1)
             {   
