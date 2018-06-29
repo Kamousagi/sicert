@@ -104,33 +104,33 @@ class CargarEvaluacionController extends Controller
                 $nom_alumno = [];
                 $num_seccion = [];
                 $num_institucion = [];
-
                 foreach($data as $linea) {                    
                     $array_linea = explode(';',$linea);
                     $indice++;
                     $ind_discapacitado_valor = $array_linea[6];
                     $nom_alumno_valor = $array_linea[7];// trim(substr($linea, 40, 14))." ".trim(substr($linea, 54, 12));
-                    $num_seccion_valor = $array_linea[20] . $array_linea[21];// substr($linea, 90, 2);
+                    $num_seccion_valor = $array_linea[21];// substr($linea, 90, 2);
                     $num_institucion_valor = $array_linea[16];// substr($linea, 74, 7);
-                    
+
                     for($a=22; $a<22+$num_preguntas; $a++)
                     {                        
                         if ($array_linea[$a] == "*")
                         {
                             $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
-                            $nota[$indice-1][$a-22] = "0";
+                            //$nota[$indice-1][$a-22] = "0";
                         }
                         else
                         {
                             if ($array_linea[$a] == "")
                             {
-                                $nota[$indice-1][$a-22] = "0";
+                                $errores[] = "En la linea $indice, no se encontro una respuesta válida.";
+                                //$nota[$indice-1][$a-22] = "0";
                             }
                             else 
                             {
                                 $nota[$indice-1][$a-22] = $array_linea[$a];
                             }
-                        }                                                
+                        }
                     }
 
                     if(
@@ -160,6 +160,7 @@ class CargarEvaluacionController extends Controller
                     $num_seccion[] = (int)$num_seccion_valor;
                     $num_institucion[] = $num_institucion_valor;
                     //$nota[$indice] = str_split($nota_valor);
+                    //die("hola4");
                 }
                 if(count($errores))
                 {
